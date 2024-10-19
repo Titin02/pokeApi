@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- <popUp/> -->
         <searchForm @search="searchPokemon" />
         <div>
             {{ errorMessage }}
@@ -23,11 +24,14 @@ import CardPokemon from './components/common/CardPokemon.vue'
 import { fetchPokemon } from './services/searchPokemon.js'
 import { generationI } from './services/Igeneration.js'
 import searchForm from './components/search/formSearchPokemon.vue'
+import popUp from './components/popUp.vue'
+
 
 export default {
     components: {
         CardPokemon,
-        searchForm
+        searchForm,
+        popUp
     },
     data() {
         return {

@@ -26,5 +26,10 @@
   "bugs": {
     "url": "https://github.com/Titin02/pokeApi/issues"
   },
-  "homepage": "https://github.com/Titin02/pokeApi#readme"
+  "homepage": "https://github.com/Titin02/pokeApi#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/vue-fontawesome": "^3.0.8"
+  }
 }
