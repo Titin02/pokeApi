@@ -12,7 +12,7 @@
     ```
 2. Navega al directorio:
     ```bash
-    cd /pokeAPI
+    cd pokeAPI/
     ```
 3. Instalar las dependencias:
    ```bash
