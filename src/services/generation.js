@@ -1,7 +1,7 @@
-export async function generationI() {
+export async function generation(gen) {
     try {
         const response = await fetch(
-            `https://pokeapi.co/api/v2/pokemon?limit=151`
+            `https://pokeapi.co/api/v2/generation/${gen}/`
         );
         if (!response.ok) {
             throw new Error("Error de conexion con la api");
@@ -10,6 +10,6 @@ export async function generationI() {
         return data;
     } catch (e) {
         console.error("Error al obtener la data:", e);
-        throw error; 
+        throw e; 
     }
 }
