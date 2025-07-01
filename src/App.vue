@@ -43,14 +43,24 @@ export default {
         }
     },
     methods: {
+        normalizeText(text) {
+            return text
+                .trim()
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+        },
         async searchPokemon(id) {
-            if (!id) {
+            const cleanId = this.normalizeText(id)
+            console.log('Buscando:',cleanId)
+
+            if (!cleanId) {
                 this.errorMessage = 'Por favor, ingresa un ID o nombre de Pokémon.';
                 this.pokemonSearch = false;
                 return;
             }
-
-            const data = await fetchPokemon(id)
+            
+            const data = await fetchPokemon(cleanId)
             try {
                 if (data) {
                     this.pokemonData = data
