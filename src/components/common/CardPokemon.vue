@@ -3,11 +3,11 @@
         <header class="pokemonHeader">
             <img :src="pokemonImage" class="pokemonImage" alt="Pokemon Image" />
         </header>
-        <div class="nombre">
-            <h2>{{ pokemonData.name }}</h2>
-        </div>
         <div class="pokemonInfo">
-            <p class="pokemonIndex">N°: {{ pokemonData.id }}</p>
+            <div class="pokemonName">
+                <h2>{{ pokemonData.name }}</h2>
+                <p class="pokemonIndex">N°: {{ pokemonData.id }}</p>
+            </div>
             <div class="pokemonTypes">
                 <div
                     v-for="(typeObj, index) in pokemonData.types"
@@ -83,7 +83,8 @@ export default {
     border-radius: 1rem;
     width: 12rem;
     height: 12rem;
-    border: 2px solid rgba(155, 155, 155, 0.9);
+    border: 1px solid rgba(155, 155, 155, 0.9);
+    box-shadow: 0 4px 8px 0 hsla(0, 0%, 0%, 0.3);
     color: #000;
     cursor: pointer;
     font-size: 14px;
@@ -95,7 +96,7 @@ export default {
 }
 
 .cardPokemon:hover {
-    transform: scale(1.2);
+    transform: scale(1.05);
 }
 
 .pokemonTypes {
@@ -123,5 +124,10 @@ export default {
 
 .typeName {
     text-transform: capitalize;
+}
+
+.pokemonName {
+    text-transform: capitalize;
+    text-align: center;
 }
 </style>
