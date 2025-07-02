@@ -25,7 +25,11 @@
                     <span class="capitalize">{{ typeObj.type.name }}</span>
                 </div>
             </div>
-            <span class="text-xs" :style="{color: mainTypeColor}" v-if="generationName">
+            <span 
+                class="text-xs" 
+                :style="{color: mainTypeColor}" 
+                v-if="generationName"
+            >
                 {{ formattedGeneration  }}
             </span>
         </div>
