@@ -1,6 +1,6 @@
 <template>
-    <div class="grid justify-center rounded-xl w-48 h-48 text-black cursor-pointer text-sm font-[cursive] pt-16 transition-transform duration-500 bg-white shadow-md hover:scale-105">
-        <header class="mt-[-7rem] flex items-end justify-around">
+    <div class="grid justify-center rounded-xl w-48 h-48 text-black cursor-pointer text-sm font-[cursive] transition-transform duration-500 bg-white shadow-md hover:scale-105">
+        <header class="flex items-end justify-around">
             <img :src="pokemonImage" class="w-[90px]" alt="Pokemon Image" />
         </header>
         <div class="text-center">
@@ -64,70 +64,3 @@ export default {
     },
 }
 </script>
-
-<!-- <style scoped>
-.pokemonHeader {
-    margin-top: -7rem;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
-}
-
-.pokemonImage {
-    width: 90px;
-}
-
-.cardPokemon {
-    display: grid;
-    justify-content: center;
-    border-radius: 1rem;
-    width: 12rem;
-    height: 12rem;
-    border: 1px solid rgba(155, 155, 155, 0.9);
-    box-shadow: 0 4px 8px 0 hsla(0, 0%, 0%, 0.3);
-    color: #000;
-    cursor: pointer;
-    font-size: 14px;
-    font-family: cursive;
-    object-fit: cover;
-    padding-top: 4rem;
-    transition: transform 0.5s;
-    background: #fff;
-}
-
-.cardPokemon:hover {
-    transform: scale(1.05);
-}
-
-.pokemonTypes {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.pokemonType {
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-    background-color: #eee;
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.5rem;
-    font-size: 0.8rem;
-}
-
-.typeIcon {
-    width: 20px;
-    height: 20px;
-}
-
-.typeName {
-    text-transform: capitalize;
-}
-
-.pokemonName {
-    text-transform: capitalize;
-    text-align: center;
-}
-</style> -->
