@@ -43,9 +43,13 @@ export default {
 		return {
 			pokemonData: {},
 			pokemonID: "",
-			pokemonDatageneration: {},
+			pokemonDatageneration: [],
 			pokemonSearch: false,
 			errorMessage: "",
+			offset: 0,
+			loading: false,
+			endOfList: false,
+			totalLoaded: 0,
 		};
 	},
 	methods: {
@@ -64,7 +68,7 @@ export default {
 				this.pokemonSearch = false;
 				return;
 			}
-
+			console.log(cleanId)
 			const data = await fetchPokemon(cleanId);
 			try {
 				if (data) {
@@ -105,15 +109,71 @@ export default {
 			}
 		},
 
+		async fetchMorePokemon() {
+			try {
+				const limit = 30
+				const maxPokemon = 1025
+
+				if(this.totalLoaded >= maxPokemon) {
+					this.endOfList = true
+					this.loading = false
+					return
+				}
+
+				const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=30&offset=${this.offset}`)
+				const data = await response.json()
+
+				const pokemonDetail = data.results.map(async (pokemon) => {
+					const res = await fetch(pokemon.url)
+					const detail = await res.json()
+					return detail;
+				})
+
+				const fullDetail = await Promise.all(pokemonDetail)
+
+				const remaining = maxPokemon - this.totalLoaded
+				const toAdd = fullDetail.slice(0, remaining)
+
+				this.pokemonDatageneration.push(...toAdd)
+				this.totalLoaded += toAdd.length
+				this.offset += limit
+
+				if(this.totalLoaded >= maxPokemon) {
+					this.endOfList = true
+				}
+
+				this.loading = false
+			} catch (e) {
+				console.error("Error al cargar mas pokemones:", e)
+				this.loading = false
+			}
+		},
+
 		resetSearch() {
 			this.pokemonID = "";
 			this.pokemonData = {};
 			this.pokemonSearch = false;
 			this.errorMessage = "";
 		},
+
+		handleScroll() {
+			const scrollTop = window.scrollY
+			const windowHeight = window.innerHeight
+			const documentHeight = document.body.offsetHeight
+
+			if (scrollTop + windowHeight >= documentHeight - 10 && !this.loading && !this.endOfList) {
+				this.loading = true;
+				this.fetchMorePokemon();
+			}
+		}
 	},
 	mounted() {
-		this.searchGeneration(1);
+		// this.searchGeneration(1);
+		window.addEventListener("scroll", this.handleScroll)
+		this.fetchMorePokemon()
+	},
+	beforeDestroy() {
+		window.removeEventListener("scroll", this.handleScroll)
 	},
 };
 </script>
