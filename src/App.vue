@@ -7,7 +7,12 @@
 		<div class="flex flex-wrap gap-7 justify-center w-full" v-if="pokemonSearch">
 			<div class="pokemonForCards">
 				<CardPokemon :pokemonData="pokemonData" />
-				<button @click="resetSearch">volver</button>
+				<div class="flex flex-wrap gap-7">
+					<button @click="resetSearch">volver</button>
+					<!-- <popUp/> -->
+					 <CardCounter/>
+				</div>
+
 			</div>
 		</div>
 		<div class="flex flex-wrap gap-7 justify-center w-full" v-else>
@@ -26,13 +31,13 @@ import CardPokemon from "./components/common/CardPokemon.vue";
 import { fetchPokemon } from "./services/searchPokemon.js";
 import { generation } from "./services/generation.js";
 import searchForm from "./components/search/formSearchPokemon.vue";
-import popUp from "./components/popUp.vue";
+import CardCounter from "./components/common/CardCounter.vue";
 
 export default {
 	components: {
 		CardPokemon,
 		searchForm,
-		popUp,
+		CardCounter,
 	},
 	data() {
 		return {
