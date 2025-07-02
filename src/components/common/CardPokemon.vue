@@ -6,9 +6,11 @@
         <div class="text-center">
             <div class="capitalize">
                 <h2>{{ pokemonData.name }}</h2>
-                <p class="text-xs">N°: {{ pokemonData.id }}</p>
+                <p class="text-xs">
+                    N°: {{ pokemonData.id }}
+                </p>
             </div>
-            <div class="flex justify-center flex-wrap gap-2 mt-1">
+            <div class="flex justify-center flex-wrap gap-2 mt-1 mb-1.5">
                 <div
                     v-for="(typeObj, index) in pokemonData.types"
                     :key="index"
@@ -23,6 +25,9 @@
                     <span class="capitalize">{{ typeObj.type.name }}</span>
                 </div>
             </div>
+            <span class="text-xs" :style="{color: mainTypeColor}" v-if="generationName">
+                {{ formattedGeneration  }}
+            </span>
         </div>
     </div>
 </template>
@@ -32,7 +37,12 @@ export default {
     props: {
         pokemonData: {
             type: Object,
-            required: true
+            required: true,
+        },
+        generationName: {
+            type: String,
+            required: false,
+            default: "",
         }
     },
     computed: {
@@ -60,7 +70,25 @@ export default {
                 steel:      '#B8B8D0',
                 fairy:      '#F0B6BC'
             };
-        }
+        },
+        formattedGeneration() {
+            const map = {
+                "generation-i":     "Generación I",
+                "generation-ii":    "Generación II",
+                "generation-iii":   "Generación III",
+                "generation-iv":    "Generación IV",
+                "generation-v":     "Generación V",
+                "generation-vi":    "Generación VI",
+                "generation-vii":   "Generación VII",
+                "generation-viii":  "Generación VIII",
+                "generation-ix":    "Generación IX",
+            };
+            return map[this.generationName] || this.generationName;
+        },
+        mainTypeColor() {
+            const mainType = this.pokemonData.types?.[0]?.type?.name
+            return this.typeColors[mainType] || "#000"
+        },
     },
 }
 </script>

@@ -15,7 +15,7 @@
 				v-for="pokemon in pokemonDatageneration"
 				:key="pokemon.name"
 			>
-				<CardPokemon :pokemonData="pokemon" />
+				<CardPokemon :pokemonData="pokemon" :generationName="pokemon.generation" />
 			</div>
 		</div>
 	</div>
@@ -45,6 +45,8 @@ export default {
 			loading: false,
 			endOfList: false,
 			totalLoaded: 0,
+			limit: 30,
+			maxPokemon: 1025,
 		};
 	},
 	methods: {
@@ -82,58 +84,75 @@ export default {
 			}
 		},
 
-		async searchGeneration(gen) {
-			try {
-				const data = await generation(gen);
-				const pokemonDetail = data.pokemon_species.map(
-					async (pokemon) => {
-                        const urlPart = pokemon.url.split("/").filter(Boolean)
-                        const id = urlPart[urlPart.length - 1]
-                        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-                        const pokemonData = await response.json();
-                        return pokemonData;
-					}
-				);
-				const allPokemon = await Promise.all(pokemonDetail);
-				this.pokemonDatageneration = allPokemon.sort(
-					(a, b) => a.id - b.id
-				);
-				this.pokemonSearch = false;
-			} catch (e) {
-				console.error("Error al buscar el pokemon:", e);
-			}
-		},
+		// async searchGeneration(gen) {
+		// 	try {
+		// 		const data = await generation(gen);
+		// 		const pokemonDetail = data.pokemon_species.map(
+		// 			async (pokemon) => {
+        //                 const urlPart = pokemon.url.split("/").filter(Boolean)
+        //                 const id = urlPart[urlPart.length - 1]
+        //                 const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        //                 const pokemonData = await response.json();
+        //                 return pokemonData;
+		// 			}
+		// 		);
+		// 		const allPokemon = await Promise.all(pokemonDetail);
+		// 		this.pokemonDatageneration = allPokemon.sort(
+		// 			(a, b) => a.id - b.id
+		// 		);
+		// 		this.pokemonSearch = false;
+		// 	} catch (e) {
+		// 		console.error("Error al buscar el pokemon:", e);
+		// 	}
+		// },
 
 		async fetchMorePokemon() {
 			try {
-				const limit = 30
-				const maxPokemon = 1025
-
-				if(this.totalLoaded >= maxPokemon) {
+				if(this.totalLoaded >= this.maxPokemon) {
 					this.endOfList = true
 					this.loading = false
 					return
 				}
 
-				const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=30&offset=${this.offset}`)
+				const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${this.limit}&offset=${this.offset}`)
 				const data = await response.json()
 
 				const pokemonDetail = data.results.map(async (pokemon) => {
-					const res = await fetch(pokemon.url)
-					const detail = await res.json()
-					return detail;
+					try {
+						const res = await fetch(pokemon.url)
+						const detail = await res.json()
+
+						let generation = "unknown";
+						try {
+							const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${detail.id}`);
+							if (speciesRes.ok) {
+								const speciesData = await speciesRes.json();
+								generation = speciesData.generation.name;
+							}
+						} catch (w) {
+							console.warn("No se encontro la generación: ", w)
+						}
+
+						return {
+							...detail,
+							generation
+						};
+					} catch (e) {
+						console.error("Error en pokemon individual:", e);
+						return null;
+					}
 				})
 
 				const fullDetail = await Promise.all(pokemonDetail)
 
-				const remaining = maxPokemon - this.totalLoaded
+				const remaining = this.maxPokemon - this.totalLoaded
 				const toAdd = fullDetail.slice(0, remaining)
 
 				this.pokemonDatageneration.push(...toAdd)
 				this.totalLoaded += toAdd.length
-				this.offset += limit
+				this.offset += this.limit
 
-				if(this.totalLoaded >= maxPokemon) {
+				if(this.totalLoaded >= this.maxPokemon) {
 					this.endOfList = true
 				}
 
@@ -167,8 +186,8 @@ export default {
 		window.addEventListener("scroll", this.handleScroll)
 		this.fetchMorePokemon()
 	},
-	beforeDestroy() {
-		window.removeEventListener("scroll", this.handleScroll)
+	beforeUnmount() {
+		window.removeEventListener("scroll", this.handleScroll);
 	},
 };
 </script>
