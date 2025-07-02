@@ -4,15 +4,14 @@
 		<div>
 			{{ errorMessage }}
 		</div>
-		<div class="container" v-if="pokemonSearch">
+		<div class="flex flex-wrap gap-7 justify-center w-full" v-if="pokemonSearch">
 			<div class="pokemonForCards">
 				<CardPokemon :pokemonData="pokemonData" />
 				<button @click="resetSearch">volver</button>
 			</div>
 		</div>
-		<div class="container" v-else>
+		<div class="flex flex-wrap gap-7 justify-center w-full" v-else>
 			<div
-				class="pokemonForCards"
 				v-for="pokemon in pokemonDatageneration"
 				:key="pokemon.name"
 			>
@@ -113,16 +112,3 @@ export default {
 	},
 };
 </script>
-
-<style scoped>
-.container {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 28px;
-	justify-content: center;
-}
-
-.pokemonForCards {
-	padding: 4rem 2rem 0 2rem;
-}
-</style>
