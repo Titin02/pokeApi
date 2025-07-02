@@ -1,27 +1,26 @@
 <template>
-    <div class="cardPokemon">
-        <header class="pokemonHeader">
-            <img :src="pokemonImage" class="pokemonImage" alt="Pokemon Image" />
-            <a @click="openPopup"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg></a>
+    <div class="grid justify-center rounded-xl w-48 h-48 text-black cursor-pointer text-sm font-[cursive] pt-16 transition-transform duration-500 bg-white shadow-md hover:scale-105">
+        <header class="mt-[-7rem] flex items-end justify-around">
+            <img :src="pokemonImage" class="w-[90px]" alt="Pokemon Image" />
         </header>
-        <div class="pokemonInfo">
-            <div class="pokemonName">
+        <div class="text-center">
+            <div class="capitalize">
                 <h2>{{ pokemonData.name }}</h2>
-                <p class="pokemonIndex">N°: {{ pokemonData.id }}</p>
+                <p class="text-xs">N°: {{ pokemonData.id }}</p>
             </div>
-            <div class="pokemonTypes">
+            <div class="flex justify-center flex-wrap gap-2 mt-1">
                 <div
                     v-for="(typeObj, index) in pokemonData.types"
                     :key="index"
-                    class="pokemonType"
+                    class="flex items-center gap-1 px-2 py-1 rounded text-xs"
                     :style="{backgroundColor: typeColors[typeObj.type.name], color: 'white'}"
                 >
                     <img
                         :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${typeObj.type.name}.svg`"
                         :alt="typeObj.type.name"
-                        class="typeIcon"
+                        class="w-5 h-5"
                     />
-                    <span class="typeName">{{ typeObj.type.name }}</span>
+                    <span class="capitalize">{{ typeObj.type.name }}</span>
                 </div>
             </div>
         </div>
@@ -66,7 +65,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .pokemonHeader {
     margin-top: -7rem;
     display: flex;
@@ -131,4 +130,4 @@ export default {
     text-transform: capitalize;
     text-align: center;
 }
-</style>
+</style> -->
