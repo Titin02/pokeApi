@@ -31,14 +31,12 @@ import CardPokemon from "./components/common/CardPokemon.vue";
 import { fetchPokemon } from "./services/searchPokemon.js";
 import { generation } from "./services/generation.js";
 import searchForm from "./components/search/formSearchPokemon.vue";
-import popUp from "./components/popUp.vue";
 import CardCounter from "./components/common/CardCounter.vue";
 
 export default {
 	components: {
 		CardPokemon,
 		searchForm,
-		popUp,
 		CardCounter,
 	},
 	data() {
