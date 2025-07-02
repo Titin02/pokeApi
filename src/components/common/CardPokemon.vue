@@ -6,10 +6,23 @@
         <div class="nombre">
             <h2>{{ pokemonData.name }}</h2>
         </div>
-        <div>
+        <div class="pokemonInfo">
             <p class="pokemonIndex">N°: {{ pokemonData.id }}</p>
-            <p class="pokemonAltura">Altura: {{ pokemonData.height }}</p>
-            <p class="pokemonAnchura">Anchura: {{ pokemonData.weight }}</p>
+            <div class="pokemonTypes">
+                <div
+                    v-for="(typeObj, index) in pokemonData.types"
+                    :key="index"
+                    class="pokemonType"
+                    :style="{backgroundColor: typeColors[typeObj.type.name], color: 'white'}"
+                >
+                    <img
+                        :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${typeObj.type.name}.svg`"
+                        :alt="typeObj.type.name"
+                        class="typeIcon"
+                    />
+                    <span class="typeName">{{ typeObj.type.name }}</span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -24,19 +37,44 @@ export default {
     },
     computed: {
         pokemonImage() {
-            return `src/assets/pokemones/${this.pokemonData.id}.gif`
+            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${this.pokemonData.id}.png`
+        },
+        typeColors() {
+            return {
+                normal:     '#A8A878',
+                fire:       '#F08030',
+                water:      '#6890F0',
+                grass:      '#78C850',
+                electric:   '#F8D030',
+                ice:        '#98D8D8',
+                fighting:   '#C03028',
+                poison:     '#A040A0',
+                ground:     '#E0C068',
+                flying:     '#A890F0',
+                psychic:    '#F85888',
+                bug:        '#A8B820',
+                rock:       '#B8A038',
+                ghost:      '#705898',
+                dragon:     '#7038F8',
+                dark:       '#705848',
+                steel:      '#B8B8D0',
+                fairy:      '#F0B6BC'
+            };
         }
-    }
+    },
 }
 </script>
 
 <style scoped>
 .pokemonHeader {
-    height: 6rem;
     margin-top: -7rem;
     display: flex;
     align-items: flex-end;
     justify-content: space-around;
+}
+
+.pokemonImage {
+    width: 90px;
 }
 
 .cardPokemon {
@@ -58,5 +96,32 @@ export default {
 
 .cardPokemon:hover {
     transform: scale(1.2);
+}
+
+.pokemonTypes {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pokemonType {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    background-color: #eee;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.typeIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.typeName {
+    text-transform: capitalize;
 }
 </style>
