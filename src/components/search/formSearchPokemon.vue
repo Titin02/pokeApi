@@ -1,8 +1,12 @@
 <template>
-    <form @submit.prevent="search" class="searchMenu">
-        <label for="">Busqueda pokemon</label>
-        <input v-model="pokemonID" placeholder="Ingrese un N° o nombre" />
-        <button type="submit">Buscar</button>
+    <form @submit.prevent="search" class="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-xl shadow-md w-full max-w-2xl mx-auto">
+        <div class="w-full">
+            <input 
+                v-model="pokemonID" 
+                placeholder="Buscar pokemon"
+                class="w-full px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-300 transition"
+            />
+        </div>
     </form>
 </template>
 
@@ -20,13 +24,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-.searchMenu {
-    display: flex;
-    color: #000;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-</style>
