@@ -5,43 +5,56 @@
 			 <div class="flex justify-center">
 				 <div class="p-4 rounded-xl w-full max-w-sm">
 					 <searchForm @search="searchPokemon" />
-					 <!-- <p v-if="errorMessage" class="text-red-600 mt-2 text-sm text-center">
-						 {{ errorMessage }}
-					 </p> -->
 				 </div>
 			 </div>
 			<!-- Generacion -->
 			<div class="bg-white p-2 rounded-xl shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between">
-				<label class="font-semibold text-gray-700 mb-2 sm:mb-0">
-					Seleccione Generación
-				</label>
-				<GenerationSelector 
-					v-model="selectedGeneration"
-					:generations="generations"
-				/>
+				<div class="flex items-center gap-3">
+					<label class="font-semibold text-gray-700 mb-2 sm:mb-0 text-sm">
+						Seleccione Generación:
+					</label>
+					<GenerationSelector 
+						v-model="selectedGeneration"
+						:generations="generations"
+					/>
+				</div>
+				<div class="flex items-center gap-3">
+					<label class="font-semibold text-gray-700 mb-2 sm:mb-0 text-sm">
+						Ordenar por:
+					</label>
+					<OrderSelector 
+						v-model="sortOption"
+						:options="[
+							{value: 'number', label: 'Número'},
+							{value: 'name', label: 'Nombre'},
+						]"
+					/>
+					<button
+						@click="toggleDirection"
+						class="p-2 rounded-lg bg-white border border-gray-300 shadow-md hover:bg-gray-50 transition cursor-pointer"
+						title="Cambiar orden"
+					>
+						<svg class="w-4 h-4 transform transition-transform duration-300" :class="{ 'rotate-180': sortOrder === 'desc' }" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M5.5 7l4.5 4.5L14.5 7H5.5z" />
+						</svg>
+					</button>
+				</div>
 			</div>
 			<!-- Card pokemon busqueda -->
 			<div v-if="pokemonSearch" class="bg-white p-6 rounded-xl shadow-md">
-				<!-- <div class="flex flex-col gap-7 justify-center w-full"> -->
 				<div class="flex flex-col items-center space-y-4">
 					<CardPokemon :pokemonData="pokemonData" />
 					<div class="flex flex-wrap gap-4">
 						<button @click="resetSearch" class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white shadow-md cursor-pointer hover:scale-95">
 							Volver
 						</button>
-						<!-- <popUp/> -->
 						<CardCounter/>
 					</div>
 				</div>
 			</div>
 			<!-- Lista de pokemones -->
-			<!-- <div v-else class="flex flex-wrap gap-7 justify-center w-full"> -->
 			<div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-				<div
-					v-for="pokemon in pokemonDatageneration"
-					:key="pokemon.name"
-					class="flex justify-center"
-				>
+				<div v-for="pokemon in pokemonDatageneration" :key="pokemon.name" class="flex justify-center">
 					<CardPokemon :pokemonData="pokemon" :generationName="pokemon.generation" />
 				</div>
 			</div>
@@ -56,6 +69,7 @@ import { generation } from "./services/generation.js";
 import searchForm from "./components/search/formSearchPokemon.vue";
 import CardCounter from "./components/common/CardCounter.vue";
 import GenerationSelector from "./components/common/GenerationSelector.vue";
+import OrderSelector from "./components/common/OrderSelector.vue";
 
 export default {
 	components: {
@@ -63,6 +77,7 @@ export default {
 		searchForm,
 		CardCounter,
 		GenerationSelector,
+		OrderSelector,
 	},
 	data() {
 		return {
@@ -93,6 +108,9 @@ export default {
 				{ id: 9, name: "Generación IX"}
 			],
 			isFilterByGeneration: false,
+			//Order by
+			sortOption: 'number',
+			sortOrder: 'asc',
 		};
 	},
 	methods: {
@@ -138,6 +156,9 @@ export default {
 				this.totalLoaded = 0
 				this.endOfList = true
 
+				const selectedGen = this.generations.find(g => g.id === generationId)
+				const generations = selectedGen ? selectedGen.name : `Generación ${generationId}`
+
 				const data = await generation(generationId)
 				const pokemonDetail = data.pokemon_species.map(
 					async (pokemon) => {
@@ -145,7 +166,10 @@ export default {
                         const id = urlPart[urlPart.length - 1]
                         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
                         const pokemonData = await response.json()
-                        return pokemonData
+                        return {
+							...pokemonData,
+							generation: generations
+						}
 					}
 				);
 				const allPokemon = await Promise.all(pokemonDetail)
@@ -153,6 +177,7 @@ export default {
 					(a, b) => a.id - b.id
 				);
 				this.pokemonSearch = false
+				this.sortPokemon()
 			} catch (e) {
 				console.error("Error al buscar el pokemon:", e)
 			}
@@ -214,6 +239,7 @@ export default {
 				}
 
 				this.loading = false
+				this.sortPokemon()
 			} catch (e) {
 				console.error("Error al cargar mas pokemones:", e)
 				this.loading = false
@@ -246,6 +272,26 @@ export default {
 				this.fetchMorePokemon();
 			}
 		},
+		toggleDirection() {
+			this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc"
+			this.sortPokemon()
+		},
+		sortPokemon() {
+			if (this.sortOption === "name") {
+				this.pokemonDatageneration.sort((a, b) => {
+					return this.sortOrder === "asc"
+						? a.name.localeCompare(b.name)
+						: b.name.localeCompare(a.name)
+				});
+			} else {
+				this.pokemonDatageneration.sort((a, b) => {
+					return this.sortOrder === "asc"
+						? a.id - b.id
+						: b.id - a.id
+				});
+			}
+			this.pokemonDatageneration = [...this.pokemonDatageneration]
+		},
 	},
 	mounted() {
 		// this.searchGeneration(1);
@@ -267,7 +313,13 @@ export default {
 			} else {
 				this.searchGeneration(newGen)
 			}
-		}
+		},
+		sortOption() {
+			this.sortPokemon()
+		},
+		sortOrder(){
+			this.sortPokemon()
+		},
 	},
 };
 </script>
