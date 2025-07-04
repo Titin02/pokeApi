@@ -179,4 +179,10 @@ watch(selectedGeneration, (newGen) => {
 		searchGeneration(newGen)
 	}
 })
+	<router-view />
+</template>
+<script>
+export default {
+	name: 'App',
+};
 </script>
