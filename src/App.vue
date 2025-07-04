@@ -73,32 +73,10 @@ import GenerationSelector from './components/common/GenerationSelector.vue'
 import OrderSelector from './components/common/OrderSelector.vue'
 // Services
 import { fetchPokemonById } from './services/searchPokemon.js'
-import { generation } from './services/generation.js'
 // Composables
-import { usePokemonSelector } from './composable/usePokemonSelector.js'
-import { usePokemonLoader } from './composable/usePokemonLoader.js'
-
-const {
-	selectedGeneration,
-	sortOption,
-	sortOrder,
-	sortedPokemon,
-	setPokemonList,
-	toggleSortOrder,
-} = usePokemonSelector()
-
-const {
-	fetchMorePokemon,
-	resetPagination,
-	endOfList,
-	loading,
-} = usePokemonLoader(setPokemonList, sortedPokemon)
-
-const pokemonData = ref({})
-const pokemonSearch = ref(false)
-const offset = ref(0)
-const totalLoaded = ref(0)
-const isFilterByGeneration = ref(false)
+import { PokemonSelector } from './composable/PokemonSelector.js'
+import { PokemonLoader } from './composable/PokemonLoader.js'
+import { PokemonGeneration } from './composable/PokemonGeneration.js'
 
 const generations = [
 	{ id: 0, name: "All"},
@@ -112,6 +90,30 @@ const generations = [
 	{ id: 8, name: "Generación VIII"},
 	{ id: 9, name: "Generación IX"}
 ]
+
+const {
+	selectedGeneration,
+	sortOption,
+	sortOrder,
+	sortedPokemon,
+	setPokemonList,
+	toggleSortOrder,
+} = PokemonSelector()
+
+const {
+	fetchMorePokemon,
+	resetPagination,
+	endOfList,
+	loading,
+} = PokemonLoader(setPokemonList, sortedPokemon)
+
+const {
+	searchGeneration,
+	isFilterByGeneration,
+} = PokemonGeneration(setPokemonList, generations)
+
+const pokemonData = ref({})
+const pokemonSearch = ref(false)
 
 function normalizeText(text) {
 	return text
@@ -133,39 +135,6 @@ async function searchPokemon(id) {
 		pokemonSearch.value = true
 	} else {
 		pokemonSearch.value = false
-	}
-}
-
-async function searchGeneration(gen) {
-	const generationId = typeof gen === "object" ? Number(gen.target.value) : gen
-
-	try {
-		isFilterByGeneration.value = true
-		offset.value = 0
-		totalLoaded.value = 0
-		endOfList.value = true
-
-		const selectedGen = generations.find(g => g.id === generationId)
-		const generationName = selectedGen ? selectedGen.name : `Generación ${generationId}`
-
-		const data = await generation(generationId)
-		const pokemonDetail = data.pokemon_species.map(
-			async (pokemon) => {
-				const urlPart = pokemon.url.split("/").filter(Boolean)
-				const id = urlPart[urlPart.length - 1]
-				const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-				const pokemonDatails = await response.json()
-				return {
-					...pokemonDatails,
-					generation: generationName
-				}
-			}
-		)
-		const allPokemon = (await Promise.all(pokemonDetail)).filter(Boolean)
-		setPokemonList(allPokemon)
-		pokemonSearch.value = false
-	} catch (e) {
-		console.error("Error al buscar el pokemon:", e)
 	}
 }
 
@@ -204,9 +173,7 @@ watch(selectedGeneration, (newGen) => {
 	if(newGen === 0) {
 		isFilterByGeneration.value = false
 		setPokemonList([])
-		offset.value = 0
-		totalLoaded.value = 0
-		endOfList.value = false
+		resetPagination()
 		fetchMorePokemon()
 	} else {
 		searchGeneration(newGen)
