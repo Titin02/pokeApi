@@ -1,4 +1,4 @@
-export async function fetchPokemon(pokemonID) {
+export async function fetchPokemonById(pokemonID) {
     try {
         const response = await fetch(
             `https://pokeapi.co/api/v2/pokemon/${pokemonID}`
