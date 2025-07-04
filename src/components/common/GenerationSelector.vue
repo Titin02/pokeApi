@@ -38,7 +38,7 @@ export default {
     data() {
         return {
             isFocused: false,
-        };
+        }
     },
     methods: {
         onChange(e) {

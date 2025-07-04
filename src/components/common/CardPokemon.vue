@@ -73,7 +73,7 @@ export default {
                 dark:       '#705848',
                 steel:      '#B8B8D0',
                 fairy:      '#F0B6BC'
-            };
+            }
         },
         formattedGeneration() {
             const map = {
@@ -86,8 +86,8 @@ export default {
                 "generation-vii":   "Generación VII",
                 "generation-viii":  "Generación VIII",
                 "generation-ix":    "Generación IX",
-            };
-            return map[this.generationName] || this.generationName;
+            }
+            return map[this.generationName] || this.generationName
         },
         mainTypeColor() {
             const mainType = this.pokemonData.types?.[0]?.type?.name
