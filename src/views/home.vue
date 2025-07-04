@@ -24,7 +24,12 @@
 			<div v-if="pokemonSearch" class="bg-white p-6 rounded-xl shadow-md">
 				<!-- <div class="flex flex-col gap-7 justify-center w-full"> -->
 				<div class="flex flex-col items-center space-y-4">
-					<CardPokemon :pokemonData="pokemonData" />
+				<router-link
+					:to="`/detallePokemon/${pokemo.name}`"
+					class="block"
+                >
+				<CardPokemon :pokemonData="pokemonData" />
+                </router-link>
 					<div class="flex flex-wrap gap-4">
 						<button @click="resetSearch" class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white shadow-md cursor-pointer hover:scale-95">
 							Volver
@@ -58,9 +63,6 @@
 							{{ tipo.name }}
 							</li>
 						</ul>
-					</div>
-					<div class="popup-buttons">
-						<button @click="closePopup" class="no-popup">Atras</button>
 					</div>
 				</div>
 			</div>
@@ -110,6 +112,7 @@ export default {
 				{ id: 9, name: "Generación IX"}
 			],
 			isFilterByGeneration: false,
+			typeData: null,
 		};
 	},
 	methods: {

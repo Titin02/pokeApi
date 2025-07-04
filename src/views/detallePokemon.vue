@@ -1,39 +1,51 @@
 <template>
     <div class="p-4">
-        <h1 class="text-2xl font-bold">Detalles de: {{ $route.params.id }}</h1>
-        <!-- Aquí luego cargarás la info del Pokémon con fetch si quieres -->
+        <router-link to="/" class="block">
+            <button
+                class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white shadow-md cursor-pointer hover:scale-95">
+                Volver
+            </button>
+        </router-link>
+        <h1 class="text-2xl font-bold">Detalles de: {{ route.params.id }}</h1>
+        <div v-if="doubleDamageFrom && doubleDamageFrom.length">
+            <p><strong>Es débil contra:</strong></p>
+            <ul>
+                <li v-for="tipo in doubleDamageFrom" :key="tipo">
+                    {{ tipo }}
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { useRoute } from 'vue-router';
 import { TypePokemon } from '../services/type.js';
-export default {
-    id: "DetallePokemon",
-    methods: {
-        async loadPokemonType(pokemon) {
-            try {
-                const pokemonData = await TypePokemon(pokemon);
-                const typeUrls = pokemonData.types.map(t => t.type.url);
+import { onMounted } from 'vue';
+import { ref } from 'vue';
 
-                const allTypes = [];
 
-                // Hacemos fetch a cada URL de tipo y se guarda la información de las relaciones de daño de cada tipo en un array(allTypes)
-                for (const url of typeUrls) {
-                    const res = await fetch(url);
-                    const typeData = await res.json();
-                    allTypes.push(typeData.damage_relations.double_damage_from);
-                }
+const route = useRoute()
+const pokemonID = route.params.id
+const doubleDamageFrom = ref([])
 
-                // aplanamos y eliminamos duplicados por nombre
-                const flat = allTypes.flat();
-                const unique = [...new Map(flat.map(t => [t.name, t])).values()];
+async function loadPokemonType(pokemon) {
+    try {
+        const pokemonData = await TypePokemon(pokemon);
+        const typeUrls = pokemonData.types.map(t => t.type.url);
+        const typeDataArray = await Promise.all(
+            typeUrls.map(url => fetch(url).then(res => res.json()))
+        );
+        const typeNames = typeDataArray.map(data => data.damage_relations.double_damage_from);
+        const allNames = typeNames.flat().map(type => type.name);
 
-                this.typeData = unique;
-                console.log("Es débil contra:", unique.map(t => t.name));
-            } catch (e) {
-                console.error("error al cargar:", e);
-            }
-        },
+         doubleDamageFrom.value = [...new Set(allNames)];
+    } catch (e) {
+        console.error("error al cargar:", e);
     }
-};
+}
+
+onMounted(() => {
+    loadPokemonType(pokemonID)
+})
 </script>

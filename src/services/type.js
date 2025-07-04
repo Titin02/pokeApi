@@ -1,7 +1,7 @@
-export async function TypePokemon(pokemon) {
+export async function TypePokemon(pokemonID) {
     try {
         const response = await fetch(
-            `https://pokeapi.co/api/v2/pokemon/${pokemon.name}/`
+            `https://pokeapi.co/api/v2/pokemon/${pokemonID}/`
         );
         if (!response.ok) {
             throw new Error("La respuesta de la api no es correcta");
