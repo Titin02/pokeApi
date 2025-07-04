@@ -5,7 +5,7 @@
             @change="onChange"
             @focus="isFocused = true"
             @blur="isFocused = false"
-            class="block appearance-none w-full bg-white border border-gray-300 rounded-lg hover:border-yellow-400 px-4 py-1 shadow-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-yellow-100 cursor-pointer transition"    
+            class="block appearance-none w-full bg-white border border-gray-300 rounded-l-lg hover:border-yellow-400 px-4 py-1 shadow-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-yellow-100 cursor-pointer transition"    
         >
             <option  
                 v-for="option in options" 
