@@ -82,9 +82,9 @@ import OrderSelector from '../components/common/OrderSelector.vue'
 // Services
 import { fetchPokemonById } from '../services/searchPokemon.js'
 // Composables
-import { PokemonSelector } from '../composable/PokemonSelector.js'
-import { PokemonLoader } from '../composable/PokemonLoader.js'
-import { PokemonGeneration } from '../composable/PokemonGeneration.js'
+import { usePokemonSelector } from '../composable/usePokemonSelector.js'
+import { usePokemonLoader } from '../composable/usePokemonLoader.js'
+import { usePokemonGeneration } from '../composable/usePokemonGeneration.js'
 
 const generations = [
 	{ id: 0, name: "All"},
@@ -106,19 +106,19 @@ const {
 	sortedPokemon,
 	setPokemonList,
 	toggleSortOrder,
-} = PokemonSelector()
+} = usePokemonSelector()
 
 const {
 	fetchMorePokemon,
 	resetPagination,
 	endOfList,
 	loading,
-} = PokemonLoader(setPokemonList, sortedPokemon)
+} = usePokemonLoader(setPokemonList, sortedPokemon)
 
 const {
 	searchGeneration,
 	isFilterByGeneration,
-} = PokemonGeneration(setPokemonList, generations)
+} = usePokemonGeneration(setPokemonList, generations)
 
 const pokemonData = ref({})
 const pokemonSearch = ref(false)

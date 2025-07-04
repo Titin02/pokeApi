@@ -1,7 +1,7 @@
 import { ref } from "vue"
 import { generation } from '../services/generation.js'
 
-export function PokemonGeneration(setPokemonList, generations) {
+export function usePokemonGeneration(setPokemonList, generations) {
     const isFilterByGeneration = ref(false)
 
     async function searchGeneration(gen) {

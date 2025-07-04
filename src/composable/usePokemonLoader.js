@@ -1,6 +1,6 @@
 import { ref } from "vue"
 
-export function PokemonLoader(setPokemonList, sortedPokemon) {
+export function usePokemonLoader(setPokemonList, sortedPokemon) {
     const offset = ref(0)
     const loading = ref(false)
     const endOfList = ref(false)
