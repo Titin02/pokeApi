@@ -1,5 +1,5 @@
 <template>
-    <div class="inline-block relative w-full max-w-xs">
+    <div class="inline-block relative sm:w-32 w-full">
         <select 
             :value="modelValue" 
             @change="onChange"
