@@ -39,7 +39,6 @@
 <script setup>
 import { toRefs, computed } from 'vue'
 
-
 const props = defineProps({
     pokemonData: {
         type: Object,
