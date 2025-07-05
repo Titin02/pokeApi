@@ -4,12 +4,11 @@ export async function generation(gen) {
             `https://pokeapi.co/api/v2/generation/${gen}/`
         );
         if (!response.ok) {
-            throw new Error("Error de conexion con la api");
+            throw new Error(`Conexion con la api: ${response.status}`);
         }
-        const data = await response.json();
-        return data;
+        return await response.json();;
     } catch (e) {
-        console.error("Error al obtener la data:", e);
+        console.error(e);
         throw e; 
     }
 }
