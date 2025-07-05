@@ -44,7 +44,7 @@
 			<div v-if="pokemonSearch" class="bg-white p-6 rounded-xl shadow-md">
 				<div class="flex flex-col items-center space-y-4">
 					<router-link
-						:to="`/detallePokemon/${pokemo.name}`"
+						:to="`/detallePokemon/${pokemonData.name}`"
 						class="block"
 					>
 						<CardPokemon :pokemonData="pokemonData" />
