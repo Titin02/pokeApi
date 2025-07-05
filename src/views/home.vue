@@ -1,5 +1,8 @@
 <template>
 	<div class="bg-amber-100 px-4 py-6">
+		<div class="text-center font-bold text-4xl">
+			PokeDex
+		</div>
 		<div class="max-w-6xl mx-auto space-y-6">
 			<!-- Buscar -->
 			 <div class="flex justify-center">
@@ -11,7 +14,7 @@
 			<div class="bg-white p-2 rounded-xl shadow-md">
 				<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
 					<!-- Selector Generaciones -->
-					<div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+					<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
 						<label class="font-semibold text-gray-700 mb-2 sm:mb-0 text-sm min-w-max">
 						Seleccione Generación:
 						</label>
@@ -21,7 +24,7 @@
 						/>
 					</div>
 					<!-- Selector Orden -->
-					<div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+					<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
 						<label class="font-semibold text-gray-700 mb-2 sm:mb-0 text-sm min-w-max">
 							Ordenar por:
 						</label>
@@ -63,7 +66,7 @@
 				</div>
 			</div>
 			<!-- Lista de pokemones -->
-			<div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+			<div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 				<div v-for="pokemon in sortedPokemon" :key="pokemon.name" class="flex justify-center">
 					<router-link
 						:to="`/detallePokemon/${pokemon.name}`"
