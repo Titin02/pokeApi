@@ -1,5 +1,5 @@
 <template>
-    <div class="inline-block relative w-full max-w-xs">
+    <div class="inline-block relative sm:w-32 w-full">
         <select 
             :value="modelValue" 
             @change="onChange"
@@ -23,30 +23,28 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        modelValue: {
-            type: String,
-            required: true,
-        },
-        options: {
-            type: Array,
-            required: true,
-        },
+<script setup>
+import { ref } from "vue"
+
+const props = defineProps({
+    modelValue: {
+        type: String,
+        required: true,
     },
-    data() {
-        return {
-            isFocused: false,
-        }
+    options: {
+        type: Array,
+        required: true,
     },
-    methods: {
-        onChange(e) {
-            const selected = e.target.value
-            this.$emit("update:modelValue", selected)
-            this.$emit("change", selected)
-            e.target.blur()
-        }
-    }
+})
+
+const emit = defineEmits(["update:modelValue", "change"])
+
+const isFocused = ref(false)
+
+function onChange(e) {
+    const selected = e.target.value
+    emit("update:modelValue", selected)
+    emit("change", selected)
+    e.target.blur()
 }
 </script>

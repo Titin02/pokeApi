@@ -1,5 +1,8 @@
 <template>
 	<div class="bg-amber-100 px-4 py-6">
+		<div class="text-center font-bold text-4xl">
+			PokeDex
+		</div>
 		<div class="max-w-6xl mx-auto space-y-6">
 			<!-- Buscar -->
 			 <div class="flex justify-center">
@@ -8,36 +11,42 @@
 				 </div>
 			 </div>
 			<!-- Generacion y filtro -->
-			<div class="bg-white p-2 rounded-xl shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between">
-				<div class="flex items-center gap-3">
-					<label class="font-semibold text-gray-700 mb-2 sm:mb-0 text-sm">
+			<div class="bg-white p-2 rounded-xl shadow-md">
+				<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+					<!-- Selector Generaciones -->
+					<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+						<label class="font-semibold text-gray-700 mb-2 sm:mb-0 text-sm min-w-max">
 						Seleccione Generación:
-					</label>
-					<GenerationSelector 
-						v-model="selectedGeneration"
-						:generations="generations"
-					/>
-				</div>
-				<div class="flex items-center">
-					<label class="font-semibold text-gray-700 mb-2 sm:mb-0 text-sm">
-						Ordenar por:
-					</label>
-					<OrderSelector 
-						v-model="sortOption"
-						:options="[
-							{value: 'number', label: 'Número'},
-							{value: 'name', label: 'Nombre'},
-						]"
-					/>
-					<button
-						@click="toggleSortOrder"
-						class="p-2 rounded-r-lg bg-white border border-gray-300 shadow-md hover:bg-gray-50 transition cursor-pointer"
-						title="Cambiar orden"
-					>
-						<svg class="w-4 h-4 transform transition-transform duration-300" :class="{ 'rotate-180': sortOrder === 'desc' }" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M5.5 7l4.5 4.5L14.5 7H5.5z" />
-						</svg>
-					</button>
+						</label>
+						<GenerationSelector 
+							v-model="selectedGeneration"
+							:generations="generations"
+						/>
+					</div>
+					<!-- Selector Orden -->
+					<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+						<label class="font-semibold text-gray-700 mb-2 sm:mb-0 text-sm min-w-max">
+							Ordenar por:
+						</label>
+						<div class="flex items-center">
+							<OrderSelector 
+								v-model="sortOption"
+								:options="[
+									{value: 'number', label: 'Número'},
+									{value: 'name', label: 'Nombre'},
+								]"
+							/>
+							<button
+								@click="toggleSortOrder"
+								class="p-2 rounded-r-lg bg-white border border-gray-300 shadow-md hover:bg-gray-50 transition cursor-pointer"
+								title="Cambiar orden"
+							>
+								<svg class="w-4 h-4 transform transition-transform duration-300" :class="{ 'rotate-180': sortOrder === 'desc' }" fill="currentColor" viewBox="0 0 20 20">
+									<path d="M5.5 7l4.5 4.5L14.5 7H5.5z" />
+								</svg>
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- Card pokemon busqueda -->
@@ -57,7 +66,7 @@
 				</div>
 			</div>
 			<!-- Lista de pokemones -->
-			<div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+			<div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 				<div v-for="pokemon in sortedPokemon" :key="pokemon.name" class="flex justify-center">
 					<router-link
 						:to="`/detallePokemon/${pokemon.name}`"
@@ -82,9 +91,9 @@ import OrderSelector from '../components/common/OrderSelector.vue'
 // Services
 import { fetchPokemonById } from '../services/searchPokemon.js'
 // Composables
-import { PokemonSelector } from '../composable/PokemonSelector.js'
-import { PokemonLoader } from '../composable/PokemonLoader.js'
-import { PokemonGeneration } from '../composable/PokemonGeneration.js'
+import { usePokemonSelector } from '../composable/usePokemonSelector.js'
+import { usePokemonLoader } from '../composable/usePokemonLoader.js'
+import { usePokemonGeneration } from '../composable/usePokemonGeneration.js'
 
 const generations = [
 	{ id: 0, name: "All"},
@@ -106,19 +115,19 @@ const {
 	sortedPokemon,
 	setPokemonList,
 	toggleSortOrder,
-} = PokemonSelector()
+} = usePokemonSelector()
 
 const {
 	fetchMorePokemon,
 	resetPagination,
 	endOfList,
 	loading,
-} = PokemonLoader(setPokemonList, sortedPokemon)
+} = usePokemonLoader(setPokemonList, sortedPokemon)
 
 const {
 	searchGeneration,
 	isFilterByGeneration,
-} = PokemonGeneration(setPokemonList, generations)
+} = usePokemonGeneration(setPokemonList, generations)
 
 const pokemonData = ref({})
 const pokemonSearch = ref(false)

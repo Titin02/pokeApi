@@ -1,6 +1,6 @@
 import { ref, computed } from "vue"
 
-export function PokemonSelector() {
+export function usePokemonSelector() {
 	const pokemonList = ref([])
 	const selectedGeneration = ref(0)
 	const sortOption = ref("number")
