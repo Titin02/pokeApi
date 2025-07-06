@@ -7,6 +7,7 @@
 			<input
 				v-model="pokemonID"
 				@input="onInput"
+				@blur="onBlur"
 				placeholder="Buscar Pokémon"
 				class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-300 transition"
 			/>
@@ -43,12 +44,19 @@ const pokemonID = ref("")
 const allPokemons = ref([])
 
 const filteredSuggestions = computed(() => {
+	const query = pokemonID.value.toLowerCase()
 	return allPokemons.value
 		.filter((p) =>
-			p.name.toLowerCase().includes(pokemonID.value.toLowerCase())
+			p.name.toLowerCase().includes(query) || p.id.toString().includes(query)
 		)
 		.slice(0, 5)
 })
+
+function onBlur() {
+	setTimeout(() => {
+		pokemonID.value = ""
+	}, 100);
+}
 
 function selectSuggestion(name) {
 	pokemonID.value = name
