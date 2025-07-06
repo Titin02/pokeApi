@@ -35,42 +35,42 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue"
 
-const emit = defineEmits(["search"]);
+const emit = defineEmits(["search"])
 
-const pokemonID = ref("");
-const allPokemons = ref([]);
+const pokemonID = ref("")
+const allPokemons = ref([])
 
 const filteredSuggestions = computed(() => {
 	return allPokemons.value
 		.filter((p) =>
 			p.name.toLowerCase().includes(pokemonID.value.toLowerCase())
 		)
-		.slice(0, 5);
-});
+		.slice(0, 5)
+})
 
 function selectSuggestion(name) {
-	pokemonID.value = name;
-	search();
+	pokemonID.value = name
+	search()
 }
 
 function search() {
-	emit("search", pokemonID.value);
+	emit("search", pokemonID.value)
 }
 
 async function fetchPokemons() {
 	try {
-		const res = await fetch("/data/pokemonList.json");
-		const data = await res.json();
+		const res = await fetch("/data/pokemonFullList.json")
+		const data = await res.json()
 
-		allPokemons.value = data;
+		allPokemons.value = data
 	} catch (e) {
-		console.error("Error al obtener la lista Json:", e);
+		console.error("Error al obtener la lista Json:", e)
 	}
 }
 
 onMounted(() => {
-	fetchPokemons();
-});
+	fetchPokemons()
+})
 </script>

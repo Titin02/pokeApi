@@ -4,7 +4,7 @@ export async function generation(gen) {
             `https://pokeapi.co/api/v2/generation/${gen}/`
         );
         if (!response.ok) {
-            throw new Error(`Conexion con la api: ${response.status}`);
+            throw new Error(`La respuesta de la api no es correcta: ${response.status}`);
         }
         return await response.json();;
     } catch (e) {
