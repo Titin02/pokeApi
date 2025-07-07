@@ -32,7 +32,10 @@
 					<div >
 						<button 
 							@click="filter" 
-							class="px-2 py-1 rounded-lg bg-white border border-gray-300 shadow-md hover:bg-gray-50 transition cursor-pointer"
+							:class="[
+								'px-2 py-1 rounded-lg border border-gray-300 shadow-md transition cursor-pointer',
+								filterType ? 'bg-gray-300 border-1 border-gray-400' : 'bg-white hover:bg-gray-50'
+							]"
 						>
 							Tipos
 						</button>

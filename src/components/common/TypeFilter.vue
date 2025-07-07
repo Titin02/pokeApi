@@ -8,7 +8,7 @@
 				:class="[
 					'flex gap-2 px-3 py-1 rounded text-sm shadow cursor-pointer select-none text-white transition-all duration-200',
                     typeColors[type]?.tw || 'bg-gray-400 text-white',
-                    selectedTypes.includes(type) ? 'font-bold brightness-105' : 'brightness-50'
+                    selectedTypes.includes(type) ? 'font-bold brightness-105' : 'brightness-75'
 				]"
 				type="button"
 			>
