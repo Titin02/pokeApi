@@ -55,7 +55,7 @@ const filteredSuggestions = computed(() => {
 function onBlur() {
 	setTimeout(() => {
 		pokemonID.value = ""
-	}, 100);
+	}, 100)
 }
 
 function selectSuggestion(name) {
