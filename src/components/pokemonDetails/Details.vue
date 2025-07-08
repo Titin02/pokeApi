@@ -1,54 +1,19 @@
-<template>
-    <div class="w-1/2 flex flex-col gap-4">
-        <div class="bg-white shadow rounded p-4 flex justify-center items-center">
-            <img :src="pokemonImageUrl" class="w-[300px]" alt="Pokemon Image" />
-        </div>
+<template >
+	<div class="min-h-screen bg-amber-100 p-6">
+		<div class="flex items-center justify-between mb-4">
+			<div class="text-2xl">Detalles de: {{ route.params.id }}</div>
+		</div>
 
-        <div class="bg-white shadow rounded p-4">
-            <p class="text-lg font-bold">Información</p>
-            <p class="text-sm text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque porttitor, purus facilisis tempus rhoncus, arcu nisl dictum ante, eget bibendum lectus libero id sem. Curabitur feugiat leo non feugiat pretium. Aliquam odio sapien, rhoncus ut neque quis, efficitur rhoncus elit. Aliquam finibus aliquam ex vel rutrum. Duis porttitor arcu ligula, quis sollicitudin est molestie quis. Maecenas placerat auctor libero ac volutpat. Ut faucibus dui ipsum, eget eleifend massa eleifend ac. Suspendisse eu ex eros.</p>
-        </div>
-    </div>
-    <div class="w-1/2 shadow-md bg-white rounded-md overflow-auto break-words">
-        <div class="flex justify-items-center">
-            <div class="flex w-full  rounded-xl" role="group">
-                <router-link to="/" class="block w-2/4 px-4 py-2 text-sm text-white bg-gray-600 border-none border-gray-700 hover:bg-gray-700">
-                    <button>
-                        Volver
-                    </button>
-                </router-link>
-                <button
-                    @click="activeTab = 'evoluciones'"
-                    type="button"
-                    class="flex justify-center w-full px-4 py-2 text-sm text-white bg-red-600 border-none border-red-700 hover:bg-red-700">
-                    Evoluciones
-                </button>
-                <button
-                    @click="activeTab = 'habilidades'"
-                    type="button"
-                    class="flex justify-center w-full px-4 py-2 text-sm text-white bg-red-600 border-none border-red-700 hover:bg-red-700">
-                    habilidades
-                </button>
-                <button
-                    @click="activeTab = 'stats'"
-                    type="button"
-                    class="flex justify-center w-full px-4 py-2 text-sm text-white bg-red-600 border-none border-red-700 hover:bg-red-700">
-                    Stats
-                </button>
-                <button
-                    @click="activeTab = 'debil y fuerte'"
-                    type="button"
-                    class="flex justify-center w-full px-4 py-2 text-sm text-white bg-red-600 border-none border-red-700 hover:bg-red-700">
-                    Debil y Fuerte
-                </button>
-            </div>
-        </div>
-        <div class="flex justify-center gap-2 pt-4">
-            <div
-            v-for="tipo in types"
-                :key="tipo"
-                class="flex px-3 py-1 rounded text-black text-sm font-semibold"
-                :style="{backgroundColor: typeColors[tipo], color: 'white'}">
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+			<div
+				class="bg-white rounded-xl shadow p-4 flex flex-col items-center gap-4"
+			>
+				<img :src="pokemonImageUrl" class="w-[200px]" alt="Pokemon Image" />
+                 <div
+                    v-for="tipo in types"
+                    :key="tipo"
+                    class="flex flex-wrap px-4 py-1 rounded text-black text-sm font-semibold"
+                    :style="{backgroundColor: typeColors[tipo], color: 'white'}">
                 <img
                     :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
                     :alt="tipo"
@@ -58,108 +23,232 @@
                     {{ tipo }}
                 </span>
             </div>
-        </div>
-        <h1 class="text-2xl font-mono text-center font-bold p-5">Detalles de: {{ route.params.id }}</h1>
-        <div v-if="activeTab === 'evoluciones'">
-            <h1 class="flex justify-center text-2xl">Evoluciones en proceso</h1>
-        </div>
-                <div v-if="activeTab === 'habilidades'">
-            <h1 class="flex justify-center text-2xl">Habilidades en proceso</h1>
-        </div>
-                <div v-if="activeTab === 'stats'">
-            <h1 class="flex justify-center text-2xl">Stats en proceso</h1>
-        </div>
-        <div v-if="activeTab === 'debil y fuerte'">
-            <div class="flex flex-wrap gap-4 p-2" v-if="noDamageTo && noDamageTo.length">
-                <p><strong>Sin dano a:</strong></p>
-                <div v-for="tipo in noDamageTo"
-                :key="tipo"
-                class="flex px-3 py-1 rounded text-black text-sm font-semibold"
-                :style="{backgroundColor: typeColors[tipo], color: 'white'}"
-                >
-                    <img
-                        :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
-                        :alt="tipo"
-                        class="w-5 h-5"
-                    />
-                </div>
-            </div>
-            <div class="flex flex-wrap gap-4 p-2" v-if="halfDamageTo && halfDamageTo.length">
-                <p><strong>Dano reducido a:</strong></p>
-                <div v-for="tipo in halfDamageTo"
-                    :key="tipo"
-                    class="flex px-3 py-1 rounded text-black text-sm font-semibold"
-                    :style="{backgroundColor: typeColors[tipo], color: 'white'}"
+
+				<div class="w-full bg-gray-100 rounded-xl p-4">
+					<div class="font-semibold mb-2">Informacion:</div>
+					<ul class="text-sm space-y-1 text-gray-700">
+						<li>Altura: 1.0 m</li>
+						<li>Peso: 6.9 kg</li>
+						<li>Experiencia base: 64</li>
+						<li>Generación: 1</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="lg:col-span-2 space-y-6">
+				<div class="flex flex-wrap gap-3">
+                    <router-link to="/">
+                        <button
+                            class="border border-gray-300 px-4 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                            Atras
+                        </button>
+                    </router-link>
+                    <button
+                        @click="activeTab = 'estadisticas'"
+                        type="button"
+                        :class="[
+                            'border px-4 py-2 rounded-lg text-sm',
+                            activeTab === 'estadisticas'
+                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow'
+                            : 'text-gray-700 border-gray-300 hover:bg-gray-100'
+                        ]">
+                        Estadisticas
+                    </button>
+                    <button
+                        :class="[
+                            'border px-4 py-2 rounded-lg text-sm',
+                            activeTab === 'evoluciones'
+                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow'
+                            : 'text-gray-700 border-gray-300 hover:bg-gray-100'
+                        ]"
+                        @click="activeTab = 'evoluciones'"
+                        type="button"
                     >
-                    <img
-                        :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
-                        :alt="tipo"
-                        class="w-5 h-5"
-                    />
-                </div>
-            </div>
-            <div class="flex flex-wrap gap-4 p-2" v-if="doubleDamageTo && doubleDamageTo.length">
-                <p><strong>Dano aumentado a:</strong></p>
-                <div v-for="tipo in doubleDamageTo"
-                :key="tipo"
-                class="flex px-3 py-1 rounded text-black text-sm font-semibold"
-                :style="{backgroundColor: typeColors[tipo], color: 'white'}"
-                >
-                    <img
-                        :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
-                        :alt="tipo"
-                        class="w-5 h-5"
-                    />
-                </div>
-            </div>
-            <div v-else>
-                <p>No tiene dano en aumento</p>
-            </div>
-            <div class="flex flex-wrap gap-4 p-2" v-if="noDamageFrom && noDamageFrom.length">
-                <p><strong>Inmune a:</strong></p>
-                <div v-for="tipo in noDamageFrom"
-                :key="tipo"
-                class="flex px-3 py-1 rounded text-black text-sm font-semibold"
-                :style="{backgroundColor: typeColors[tipo], color: 'white'}"
-                >
-                    <img
-                        :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
-                        :alt="tipo"
-                        class="w-5 h-5"
-                    />
-                </div>
-            </div>
-            <div class="flex flex-wrap gap-4 p-2" v-if="halfDamageFrom && halfDamageFrom.length">
-                <p><strong>Resiste a:</strong></p>
-                <div v-for="tipo in halfDamageFrom"
-                :key="tipo"
-                class="flex px-3 py-1 rounded text-black text-sm font-semibold"
-                :style="{backgroundColor: typeColors[tipo], color: 'white'}"
-                >
-                    <img
-                        :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
-                        :alt="tipo"
-                        class="w-5 h-5"
-                    />
-                </div>
-            </div>
-            <div class="flex flex-wrap gap-4 p-2" v-if="doubleDamageFrom && doubleDamageFrom.length">
-                <p><strong>Debil a:</strong></p>
-                <div v-for="tipo in doubleDamageFrom"
-                :key="tipo"
-                class="flex px-3 py-1 rounded text-black text-sm font-semibold"
-                :style="{backgroundColor: typeColors[tipo], color: 'white'}"
-                >
-                    <img
-                        :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
-                        :alt="tipo"
-                        class="w-5 h-5"
-                    />
-                </div>
-            </div>
-        </div>
-        
-    </div>
+                        Evoluciones
+                    </button>
+                    <button
+                        @click="activeTab = 'habilidades'"
+                        type="button"
+                        :class="[
+                            'border px-4 py-2 rounded-lg text-sm',
+                            activeTab === 'habilidades'
+                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow'
+                            : 'text-gray-700 border-gray-300 hover:bg-gray-100'
+                        ]"
+                    >
+                        Habilidades
+                    </button>
+                    <button
+                        @click="activeTab = 'daños'"
+                        type="button"
+                        :class="[
+                            'border px-4 py-2 rounded-lg text-sm',
+                            activeTab === 'daños'
+                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow'
+                            : 'text-gray-700 border-gray-300 hover:bg-gray-100'
+                        ]"
+                    
+                    >
+                        Daños
+                    </button>
+				</div>
+
+				<div class="bg-white rounded-xl shadow p-6">
+					<h2 class="text-xl font-bold mb-4">
+						Efectividad
+					</h2>
+					<div class="flex gap-2 mb-6">
+						<button
+							class="border border-gray-300 rounded-full px-4 py-1 text-sm bg-white"
+						>
+							Defensa
+						</button>
+						<button
+							class="border border-gray-800 text-white bg-black rounded-full px-4 py-1 text-sm"
+						>
+							Ataque
+						</button>
+					</div>
+
+					<div class="mt-6 space-y-4">
+                        <div v-if="activeTab === 'estadisticas'">
+                            <h1 class="flex justify-center text-2xl">Estadisticas en proceso</h1>
+                        </div>
+                        <div v-if="activeTab === 'evoluciones'">
+                            <h1 class="flex justify-center text-2xl">Evoluciones en proceso</h1>
+                        </div>
+                                <div v-if="activeTab === 'habilidades'">
+                            <h1 class="flex justify-center text-2xl">Habilidades en proceso</h1>
+                        </div>
+                        <div v-if="activeTab === 'daños'">
+                            <div v-if="halfDamageTo && halfDamageTo.length">
+                                <div
+                                class="text-sm mb-2 text-gray-600"
+                                >
+                                    0.5x Poco efectivo
+                                </div>
+                                <div class="flex gap-2 flex-wrap">
+                                    <div v-for="tipo in halfDamageTo"
+                                        :key="tipo"
+                                        class="flex px-3 py-1 rounded text-black text-sm font-semibold"
+                                        :style="{backgroundColor: typeColors[tipo], color: 'white'}"
+                                        >
+                                        <img
+                                            :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
+                                            :alt="tipo"
+                                            class="w-5 h-5"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="doubleDamageTo && doubleDamageTo.length">
+                                <div
+                                class="text-sm mb-2 text-gray-600"
+                                >
+                                    2× Efectivo
+                                </div>
+                                <div class="flex gap-2 flex-wrap">
+                                    <div v-for="tipo in doubleDamageTo"
+                                    :key="tipo"
+                                    class="flex px-3 py-1 rounded text-black text-sm font-semibold"
+                                    :style="{backgroundColor: typeColors[tipo], color: 'white'}"
+                                    >
+                                        <img
+                                            :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
+                                            :alt="tipo"
+                                            class="w-5 h-5"
+                                        />
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div v-if="noDamageFrom && noDamageFrom.length">
+                                <div
+                                class="text-sm mb-2 text-gray-600"
+                                >
+                                    Inmune
+                                </div>
+                                <div class="flex gap-2 flex-wrap">
+                                    <div v-for="tipo in noDamageFrom"
+                                    :key="tipo"
+                                    class="flex px-3 py-1 rounded text-black text-sm font-semibold"
+                                    :style="{backgroundColor: typeColors[tipo], color: 'white'}"
+                                    >
+                                        <img
+                                            :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
+                                            :alt="tipo"
+                                            class="w-5 h-5"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="doubleDamageFrom && doubleDamageFrom.length">
+                                <div
+                                class="text-sm mb-2 text-gray-600"
+                                >
+                                    Es debil
+                                </div>
+                                <div class="flex gap-2 flex-wrap">
+                                    <div v-for="tipo in doubleDamageFrom"
+                                    :key="tipo"
+                                    class="flex px-3 py-1 rounded text-black text-sm font-semibold"
+                                    :style="{backgroundColor: typeColors[tipo], color: 'white'}"
+                                    >
+                                        <img
+                                            :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
+                                            :alt="tipo"
+                                            class="w-5 h-5"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="halfDamageFrom && halfDamageFrom.length">
+                                <div
+                                class="text-sm mb-2 text-gray-600"
+                                >
+                                    Resiste a
+                                </div>
+                                <div class="flex gap-2 flex-wrap">
+                                    <div v-for="tipo in halfDamageFrom"
+                                    :key="tipo"
+                                    class="flex px-3 py-1 rounded text-black text-sm font-semibold"
+                                    :style="{backgroundColor: typeColors[tipo], color: 'white'}"
+                                    >
+                                        <img
+                                            :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
+                                            :alt="tipo"
+                                            class="w-5 h-5"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="noDamageTo && noDamageTo.length">
+                            <div
+                            class="text-sm mb-2 text-gray-600"
+                            >
+                                Sin daño a
+                            </div>
+                            <div class="flex gap-2 flex-wrap">
+                                <div v-for="tipo in noDamageTo"
+                                :key="tipo"
+                                class="flex px-3 py-1 rounded text-black text-sm font-semibold"
+                                :style="{backgroundColor: typeColors[tipo], color: 'white'}"
+                                >
+                                    <img
+                                        :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
+                                        :alt="tipo"
+                                        class="w-5 h-5"
+                                    />
+                                </div>
+                            </div>
+                            </div>
+                        </div >
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 <script setup>
 import { useRoute } from 'vue-router'
