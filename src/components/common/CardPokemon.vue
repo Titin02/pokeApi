@@ -12,7 +12,7 @@
             </div>
             <div class="flex justify-center flex-wrap gap-2 mt-1 mb-1.5">
                 <div
-                    v-for="(typeObj, index) in pokemonData.types"
+                    v-for="(typeObj, index) in normalizedTypes"
                     :key="index"
                     class="flex items-center gap-1 px-2 py-1 rounded text-xs"
                     :style="{backgroundColor: typeColors[typeObj.type.name], color: 'white'}"
@@ -96,5 +96,17 @@ const formattedGeneration = computed(() => {
 const mainTypeColor = computed(() => {
     const mainType = pokemonData.value.types?.[0]?.type?.name
     return typeColors[mainType] || "#000"
+})
+
+const normalizedTypes = computed(() => {
+	if (!pokemonData.value.types) return []
+
+	if (typeof pokemonData.value.types[0] === "object" && pokemonData.value.types[0].type) {
+		return pokemonData.value.types
+	}
+
+	return pokemonData.value.types.map((typeName) => ({
+		type: { name: typeName }
+	}))
 })
 </script>

@@ -83,7 +83,7 @@
 				<TypeFilter
 					:selectedTypes="selectedTypes"
 					@update:selectedType="toggleType"
-					@clear="clearTypes"
+					@clear="handleClearTypes"
 				/>
 			</div>
 			<!-- Card pokemon busqueda -->
@@ -111,7 +111,7 @@
 				class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
 			>
 				<div
-					v-for="pokemon in filteredByType(sortedPokemon)"
+					v-for="pokemon in pokemonListToDisplay"
 					:key="pokemon.name"
 					class="flex justify-center"
 				>
@@ -132,20 +132,20 @@
 
 <script setup>
 // Vue core
-import { ref, watch, onMounted, onBeforeUnmount } from "vue"
+import { ref, watch, onMounted, onBeforeUnmount, computed } from "vue"
 // Components
 import CardPokemon from "../components/common/CardPokemon.vue"
 import searchForm from "../components/search/formSearchPokemon.vue"
 import GenerationSelector from "../components/common/GenerationSelector.vue"
 import OrderSelector from "../components/common/OrderSelector.vue"
 import TypeFilter from "../components/common/TypeFilter.vue"
-// Services
-import { fetchPokemonById } from "../services/searchPokemon.js"
 // Composables
 import { usePokemonSelector } from "../composable/usePokemonSelector.js"
 import { usePokemonLoader } from "../composable/usePokemonLoader.js"
 import { usePokemonGeneration } from "../composable/usePokemonGeneration.js"
 import { usePokemonTypeFilter } from "../composable/usePokemonTypeFilter.js"
+import { usePokemonFilterCoordinator } from "../composable/usePokemonFilterCoordinator.js"
+import { usePokemonSearch } from '../composable/usePokemonSearch.js'
 
 const generations = [
 	{ id: 0, name: "Todas" },
@@ -173,7 +173,8 @@ const {
 	fetchMorePokemon, 
 	resetPagination, 
 	endOfList, 
-	loading 
+	loading,
+	allPokemonList,
 } =	usePokemonLoader(setPokemonList, sortedPokemon)
 
 const { 
@@ -188,44 +189,41 @@ const {
 	selectedTypes, 
 	filteredByType, 
 	toggleType, 
-	clearTypes 
+	clearTypes,
 } =	usePokemonTypeFilter()
 
-const pokemonData = ref({})
-const pokemonSearch = ref(false)
+const {
+	handleClearTypes,
+	setupWatchers
+} = usePokemonFilterCoordinator({
+	selectedGeneration,
+	selectedTypes,
+	clearTypes,
+	resetPagination,
+	setPokemonList,
+	fetchMorePokemon,
+})
+
+const {
+	pokemonData,
+	pokemonSearch,
+	searchPokemon,
+	resetSearch
+} = usePokemonSearch(
+	setPokemonList, 
+	fetchMorePokemon, 
+	resetPagination, 
+	isFilterByGeneration
+)
+
 const filterType = ref(false)
 
-function normalizeText(text) {
-	return text
-		.trim()
-		.toLowerCase()
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "")
-}
-
-async function searchPokemon(id) {
-	const cleanId = normalizeText(id)
-	if (!cleanId) {
-		pokemonSearch.value = false
-		return
+const pokemonListToDisplay = computed(() => {
+	if (selectedGeneration.value === 0 && selectedTypes.value.length > 0) {
+		return filteredByType(allPokemonList.value)
 	}
-	const data = await fetchPokemonById(cleanId)
-	if (data) {
-		pokemonData.value = data
-		pokemonSearch.value = true
-	} else {
-		pokemonSearch.value = false
-	}
-}
-
-function resetSearch() {
-	pokemonData.value = {}
-	pokemonSearch.value = false
-	isFilterByGeneration.value = false
-	resetPagination()
-	setPokemonList([])
-	fetchMorePokemon()
-}
+	return filteredByType(sortedPokemon.value)
+})
 
 function handleScroll() {
 	if (isFilterByGeneration.value) return
@@ -253,18 +251,11 @@ onMounted(() => {
 	fetchMorePokemon()
 })
 
-onBeforeUnmount(() => {
-	window.removeEventListener("scroll", handleScroll)
+onMounted(() => {
+	setupWatchers(searchGeneration, isFilterByGeneration)
 })
 
-watch(selectedGeneration, (newGen) => {
-	if (newGen === 0) {
-		isFilterByGeneration.value = false
-		setPokemonList([])
-		resetPagination()
-		fetchMorePokemon()
-	} else {
-		searchGeneration(newGen)
-	}
+onBeforeUnmount(() => {
+	window.removeEventListener("scroll", handleScroll)
 })
 </script>

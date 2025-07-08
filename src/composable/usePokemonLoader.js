@@ -82,5 +82,6 @@ export function usePokemonLoader(setPokemonList, sortedPokemon) {
 		resetPagination,
 		endOfList,
 		loading,
+		allPokemonList,
 	}
 }
