@@ -34,7 +34,7 @@
 							@click="filter" 
 							:class="[
 								'px-2 py-1 rounded-lg border border-gray-300 shadow-md transition cursor-pointer',
-								filterType ? 'bg-gray-300 border-1 border-gray-400' : 'bg-white hover:bg-gray-50'
+								showFilterType ? 'bg-gray-300 border-1 border-gray-400' : 'bg-white hover:bg-gray-50'
 							]"
 						>
 							Tipos
@@ -45,7 +45,8 @@
 						>
 							Ordenar por:
 						</label>
-							<div class="flex items-center">							<OrderSelector
+							<div class="flex items-center">							
+								<OrderSelector
 								v-model="sortOption"
 								:options="[
 									{ value: 'number', label: 'Número' },
@@ -79,7 +80,7 @@
 					</div>
 				</div>
 			</div>
-			<div v-if="filterType" class="bg-white p-2 rounded-xl shadow-md">
+			<div v-if="showFilterType" class="bg-white p-2 rounded-xl shadow-md">
 				<TypeFilter
 					:selectedTypes="selectedTypes"
 					@update:selectedType="toggleType"
@@ -132,7 +133,7 @@
 
 <script setup>
 // Vue core
-import { ref, watch, onMounted, onBeforeUnmount, computed } from "vue"
+import { ref, onMounted, onBeforeUnmount, computed } from "vue"
 // Components
 import CardPokemon from "../components/common/CardPokemon.vue"
 import searchForm from "../components/search/formSearchPokemon.vue"
@@ -163,7 +164,6 @@ const generations = [
 const {
 	selectedGeneration,
 	sortOption,
-	sortOrder,
 	sortedPokemon,
 	setPokemonList,
 	toggleSortOrder,
@@ -216,7 +216,7 @@ const {
 	isFilterByGeneration
 )
 
-const filterType = ref(false)
+const showFilterType = ref(false)
 
 const pokemonListToDisplay = computed(() => {
 	if (selectedGeneration.value === 0 && selectedTypes.value.length > 0) {
@@ -243,15 +243,12 @@ function handleScroll() {
 }
 
 function filter() {
-	filterType.value = !filterType.value
+	showFilterType.value = !showFilterType.value
 }
 
 onMounted(() => {
 	window.addEventListener("scroll", handleScroll)
 	fetchMorePokemon()
-})
-
-onMounted(() => {
 	setupWatchers(searchGeneration, isFilterByGeneration)
 })
 

@@ -1,6 +1,6 @@
 <template>
-	<div class="flex flex-wrap items-center gap-2">
-		<div class="flex flex-wrap justify-around gap-2 mt-1 mb-1.5">
+	<div class="space-y-2">
+		<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-2">
 			<button
 				v-for="type in pokemonTypes"
 				:key="type"
