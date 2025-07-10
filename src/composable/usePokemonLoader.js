@@ -5,7 +5,7 @@ export function usePokemonLoader(setPokemonList, sortedPokemon) {
 	const loading = ref(false)
 	const endOfList = ref(false)
 	const totalLoaded = ref(0)
-	const limit = ref(30)
+	const limit = ref(15)
 	const maxPokemon = ref(1025)
 
 	const allPokemonList = ref([])
