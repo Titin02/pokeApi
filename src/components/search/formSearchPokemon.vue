@@ -23,9 +23,9 @@
 					class="flex items-center justify-between gap-2 p-2 hover:bg-gray-100 cursor-pointer"
 				>
 					<img
-						:src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemon.id}.png`"
+						:src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`"
 						:alt="pokemon.name"
-						class="w-14 h-14"
+						class="w-10 h-10"
 					/>
 					<span class="flex-1 capitalize">{{ pokemon.name }}</span>
 					<span class="text-sm text-gray-500">N° {{ pokemon.id }}</span>

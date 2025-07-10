@@ -1,7 +1,7 @@
 <template>
     <div class="grid justify-center rounded-xl w-36 sm:w-48 h-60 sm:h-48 text-black cursor-pointer text-sm font-[cursive] transition-transform duration-500 bg-white shadow-md hover:scale-105">
         <header class="flex items-end justify-around">
-            <img :src="pokemonImage" class="w-[90px]" alt="Pokemon Image" />
+            <img :src="pokemonImage" class="w-[70px]" alt="Pokemon Image" />
         </header>
         <div class="text-center">
             <div class="capitalize">
@@ -75,7 +75,7 @@ const typeColors = {
 }
 
 const pokemonImage = computed(() => 
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemonData.value.id}.png`
+    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonData.value.id}.png`
 )
 
 const formattedGeneration = computed(() => {
