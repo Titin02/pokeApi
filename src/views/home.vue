@@ -133,7 +133,7 @@
 
 <script setup>
 // Vue core
-import { ref, onMounted, onBeforeUnmount, computed } from "vue"
+import { ref, onMounted, computed } from "vue"
 // Components
 import CardPokemon from "../components/common/CardPokemon.vue"
 import searchForm from "../components/search/formSearchPokemon.vue"
@@ -147,6 +147,7 @@ import { usePokemonGeneration } from "../composable/usePokemonGeneration.js"
 import { usePokemonTypeFilter } from "../composable/usePokemonTypeFilter.js"
 import { usePokemonFilterCoordinator } from "../composable/usePokemonFilterCoordinator.js"
 import { usePokemonSearch } from '../composable/usePokemonSearch.js'
+import { useInfiniteScroll } from '../composable/useInfiniteScroll.js'
 
 const generations = [
 	{ id: 0, name: "Todas" },
@@ -218,6 +219,13 @@ const {
 	selectedGeneration,
 )
 
+useInfiniteScroll({
+  fetchMore: fetchMorePokemon,
+  loading,
+  endOfList,
+  disabled: isFilterByGeneration,
+})
+
 const showFilterType = ref(false)
 
 const pokemonListToDisplay = computed(() => {
@@ -227,34 +235,12 @@ const pokemonListToDisplay = computed(() => {
 	return filteredByType(sortedPokemon.value)
 })
 
-function handleScroll() {
-	if(isFilterByGeneration.value) return
-
-	const scrollTop = window.scrollY
-	const windowHeight = window.innerHeight
-	const documentHeight = document.body.offsetHeight
-
-	if(
-		scrollTop + windowHeight >= documentHeight - 10 &&
-		!loading.value &&
-		!endOfList.value
-	) {
-		loading.value = true
-		fetchMorePokemon()
-	}
-}
-
 function filter() {
 	showFilterType.value = !showFilterType.value
 }
 
 onMounted(() => {
-	window.addEventListener("scroll", handleScroll)
 	fetchMorePokemon()
 	setupWatchers(searchGeneration, isFilterByGeneration)
-})
-
-onBeforeUnmount(() => {
-	window.removeEventListener("scroll", handleScroll)
 })
 </script>
