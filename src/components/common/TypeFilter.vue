@@ -1,38 +1,44 @@
 <template>
-	<div class="space-y-2">
-		<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-2">
-			<button
-				v-for="type in pokemonTypes"
-				:key="type"
-				@click="$emit('update:selectedType', type)"
-				:class="[
-					'flex gap-2 px-3 py-1 rounded text-sm shadow cursor-pointer select-none text-white transition-all duration-200',
+    <div class="space-y-4">
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-2">
+            <button 
+                v-for="type in pokemonTypes" 
+                :key="type" 
+                @click="$emit('update:selectedType', type)" 
+                :class="[
+					'flex items-center gap-2 px-3 py-1 rounded-lg text-md font-medium hover:shadow-md cursor-pointer text-white transition-all duration-300',
                     typeColors[type]?.tw || 'bg-gray-400 text-white',
-                    selectedTypes.includes(type) ? 'font-bold brightness-105' : 'brightness-75'
-				]"
-				type="button"
-			>
-                <img
+                    selectedTypes.includes(type) ? 'font-bold' : 'brightness-75'
+				]" 
+                type="button"
+            >
+                <img 
                     :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${type}.svg`"
-                    :alt="type"
+                    :alt="type" 
                     class="w-5 h-5"
                 />
-				<span class="capitalize">
+                <span class="capitalize">
                     {{ type }}
                 </span>
-			</button>
-		</div>
-		<div>
-			<button
-				v-if="selectedTypes.length"
-				@click="$emit('clear')"
-				class="ml-2 px-3 py-1 rounded-full bg-red-500 text-white text-sm shadow hover:bg-red-600 cursor-pointer select-none"
-				type="button"
-			>
-				Limpiar filtro
-			</button>
-		</div>
-	</div>
+            </button>
+        </div>
+        <div 
+            v-if="selectedTypes.length" 
+            class="text-center"
+        >
+            <button 
+                @click="$emit('clear')" 
+                type="button"
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-stone-300 text-stone-600 text-sm font-medium bg-white hover:bg-stone-100 transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Limpiar
+            </button>
+        </div>
+    </div>
 </template>
 
 <script setup>

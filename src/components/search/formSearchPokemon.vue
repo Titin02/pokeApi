@@ -1,15 +1,12 @@
 <template>
-	<form
-		@submit.prevent="search"
-		class="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-xl shadow-md w-full max-w-2xl mx-auto relative"
-	>
+	<form @submit.prevent="search">
 		<div class="w-full relative">
 			<input
 				v-model="pokemonID"
 				@input="onInput"
 				@blur="onBlur"
 				placeholder="Buscar Pokémon"
-				class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-300 transition"
+				class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-0"
 			/>
 			<!-- Sugerencias -->
 			<ul
@@ -27,8 +24,8 @@
 						:alt="pokemon.name"
 						class="w-10 h-10"
 					/>
-					<span class="flex-1 capitalize">{{ pokemon.name }}</span>
-					<span class="text-sm text-gray-500">N° {{ pokemon.id }}</span>
+					<span class="flex-1 capitalize font-mono">{{ pokemon.name }}</span>
+					<span class="text-sm text-gray-500 font-mono">N° {{ pokemon.id }}</span>
 				</li>
 			</ul>
 		</div>
