@@ -12,7 +12,16 @@
 			<img
 				:src="pokemonImage"
 				alt="Pokemon Image"
+				@load="isLoaded = true"
+				@error="hasError = true"
+				v-show="isLoaded && !hasError"
 				class="w-20 h-20 drop-shadow-sm"
+			/>
+			<img 
+				v-if="!isLoaded"
+				:src="spinnerPokeball" 
+				alt="Cargando..." 
+				class="w-8 h-8 animate-spin" 
 			/>
 		</div>
 
@@ -51,14 +60,20 @@
 </template>
 
 <script setup>
-import { toRefs, computed } from "vue"
+import { toRefs, computed, ref } from "vue"
+import spinnerPokeball from '../../assets/spinnerPokeball.png'
 
 const props = defineProps({
 	pokemonData: { type: Object, required: true },
 	generationName: { type: String, default: "" },
 })
 
-const { pokemonData, generationName } = toRefs(props)
+const isLoaded = ref(false)
+const hasError = ref(false)
+const {
+	pokemonData,
+	generationName
+} = toRefs(props)
 
 const typeColors = {
 	normal: "#A8A878",
