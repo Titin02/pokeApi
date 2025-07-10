@@ -179,10 +179,10 @@ const {
 
 const { 
 	searchGeneration, 
-	isFilterByGeneration 
+	isFilterByGeneration,
 } = usePokemonGeneration(
 	setPokemonList,
-	generations
+	generations,
 )
 
 const { 
@@ -194,7 +194,7 @@ const {
 
 const {
 	handleClearTypes,
-	setupWatchers
+	setupWatchers,
 } = usePokemonFilterCoordinator({
 	selectedGeneration,
 	selectedTypes,
@@ -208,31 +208,33 @@ const {
 	pokemonData,
 	pokemonSearch,
 	searchPokemon,
-	resetSearch
+	resetSearch,
 } = usePokemonSearch(
 	setPokemonList, 
 	fetchMorePokemon, 
 	resetPagination, 
-	isFilterByGeneration
+	isFilterByGeneration,
+	clearTypes,
+	selectedGeneration,
 )
 
 const showFilterType = ref(false)
 
 const pokemonListToDisplay = computed(() => {
-	if (selectedGeneration.value === 0 && selectedTypes.value.length > 0) {
+	if(selectedGeneration.value === 0 && selectedTypes.value.length > 0) {
 		return filteredByType(allPokemonList.value)
 	}
 	return filteredByType(sortedPokemon.value)
 })
 
 function handleScroll() {
-	if (isFilterByGeneration.value) return
+	if(isFilterByGeneration.value) return
 
 	const scrollTop = window.scrollY
 	const windowHeight = window.innerHeight
 	const documentHeight = document.body.offsetHeight
 
-	if (
+	if(
 		scrollTop + windowHeight >= documentHeight - 10 &&
 		!loading.value &&
 		!endOfList.value

@@ -5,7 +5,9 @@ export function usePokemonSearch(
 	setPokemonList,
 	fetchMorePokemon,
 	resetPagination,
-	isFilterByGeneration
+	isFilterByGeneration,
+	clearTypes,
+	selectedGeneration,
 ) {
 	const pokemonData = ref({})
 	const pokemonSearch = ref(false)
@@ -24,6 +26,10 @@ export function usePokemonSearch(
 			pokemonSearch.value = false
 			return
 		}
+
+		clearTypes()
+		selectedGeneration.value = 0
+		
 		const data = await fetchPokemonById(cleanId)
 		if (data) {
 			pokemonData.value = data
