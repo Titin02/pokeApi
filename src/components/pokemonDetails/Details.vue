@@ -1,6 +1,5 @@
 <template >
-	<div class="min-h-screen bg-gray-50 p-6">
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+		<div>
 			<div class="lg:col-span-2 space-y-6">
 				<div class="flex flex-wrap gap-3">
                     <router-link to="/">
@@ -69,20 +68,56 @@
                             <h1 class="flex justify-center text-2xl">Estadisticas en proceso</h1>
                         </div>
                         <div v-if="activeTab === 'evoluciones'">
-                            <div v-if="evolutions.length" class="flex items-center gap-4">
-                                <template v-for="(pokemon, index) in evolutions" :key="pokemon">
-                                <div class="text-center">
+                            <div v-if="evolutions.length" class="space-y-6">
+                                <div
+                                v-for="(branch, i) in evolutions"
+                                :key="i"
+                                class="flex items-center gap-4"
+                                >
+                                <div
+                                    v-for="(evo, index) in branch"
+                                    :key="evo.from + '-' + (evo.to ?? 'final')"
+                                    class="flex items-center"
+                                >
+                                    <div class="text-center">
                                     <img
-                                    :src="`https://img.pokemondb.net/artwork/large/${pokemon}.jpg`"
-                                    :alt="pokemon"
+                                        :src="`https://img.pokemondb.net/artwork/large/${evo.from}.jpg`"
+                                        :alt="evo.from"
+                                        class="w-24 h-24 object-contain"
+                                    />
+                                    <p class="capitalize mt-1">{{ evo.from }}</p>
+                                    </div>
+                                    <div v-if="evo.to" class="flex flex-col items-center mx-2">
+                                    <span class="text-sm text-gray-500">
+                                        {{
+                                        evo.trigger === 'level-up'
+                                            ? `Nivel ${evo.level ?? '?'}`
+                                            : evo.trigger === 'use-item'
+                                            ? 'Piedra evolutiva'
+                                            : evo.trigger === 'trade'
+                                            ? 'Intercambio'
+                                            : evo.trigger ?? 'Desconocido'
+                                        }}
+                                    </span>
+                                    <span class="text-2xl">→</span>
+                                    </div>
+                                </div>
+                                <div v-if="branch[branch.length - 1].to" class="text-center">
+                                    <img
+                                    :src="`https://img.pokemondb.net/artwork/large/${branch[branch.length - 1].to}.jpg`"
+                                    :alt="branch[branch.length - 1].to"
                                     class="w-24 h-24 object-contain"
                                     />
-                                    <p class="capitalize mt-1">{{ pokemon }}</p>
+                                    <p class="capitalize mt-1">
+                                    {{ branch[branch.length - 1].to }}
+                                    </p>
                                 </div>
-                                <span v-if="index < evolutions.length - 1" class="text-2xl">→</span>
-                                </template>
+                                </div>
                             </div>
-                        </div>
+                            </div>
+
+
+
                         <div v-if="activeTab === 'habilidades'">
                             <h1 class="flex justify-center text-2xl">Habilidades en proceso</h1>
                         </div>
@@ -225,7 +260,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 </template>
 <script setup>
 import { useRoute } from 'vue-router'
@@ -267,22 +301,37 @@ const {
 } = PokemonType()
 
 async function fetchEvolutions(pokemonName) {
-  const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
-  const pokemonData = await pokemonRes.json()
+    const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+    const pokemonData = await pokemonRes.json()
 
-  const speciesRes = await fetch(pokemonData.species.url)
-  const speciesData = await speciesRes.json()
+    const speciesRes = await fetch(pokemonData.species.url)
+    const speciesData = await speciesRes.json()
 
-  const evoRes = await fetch(speciesData.evolution_chain.url)
-  const evolutionData = await evoRes.json()
+    const evoRes = await fetch(speciesData.evolution_chain.url)
+    const evolutionData = await evoRes.json()
 
-  function getEvolutions(chain, evolutions = []) {
-    if (!chain) return evolutions
-    evolutions.push(chain.species.name)
-    chain.evolves_to.forEach(evo => getEvolutions(evo, evolutions))
-    return evolutions
-  }
+    function getEvolutions(chain, path = [], branches = []) {
+        if (!chain) return branches
 
+        const from = chain.species.name
+
+        if (!chain.evolves_to.length) {
+            branches.push([...path, { from, to: null, level: null, trigger: null }])
+            return branches
+        }
+
+        chain.evolves_to.forEach(evo => {
+            const evoDetails = evo.evolution_details[0]
+            const to = evo.species.name
+            const level = evoDetails?.min_level ?? null
+            const trigger = evoDetails?.trigger?.name ?? null
+
+            const newPath = [...path, { from, to, level, trigger }]
+            getEvolutions(evo, newPath, branches)
+        })
+
+        return branches
+    }
   return getEvolutions(evolutionData.chain)
 }
 
