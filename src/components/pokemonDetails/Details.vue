@@ -1,40 +1,5 @@
 <template >
-	<div class="min-h-screen bg-amber-100 p-6">
-		<div class="flex items-center justify-between mb-4">
-			<div class="text-2xl">Detalles de: {{ route.params.id }}</div>
-		</div>
-
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-			<div
-				class="bg-white rounded-xl shadow p-4 flex flex-col items-center gap-4"
-			>
-				<img :src="pokemonImageUrl" class="w-[200px]" alt="Pokemon Image" />
-                 <div
-                    v-for="tipo in types"
-                    :key="tipo"
-                    class="flex flex-wrap px-4 py-1 rounded text-black text-sm font-semibold"
-                    :style="{backgroundColor: typeColors[tipo], color: 'white'}">
-                <img
-                    :src="`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${tipo}.svg`"
-                    :alt="tipo"
-                    class="w-5 h-5"
-                />
-                <span>
-                    {{ tipo }}
-                </span>
-            </div>
-
-				<div class="w-full bg-gray-100 rounded-xl p-4">
-					<div class="font-semibold mb-2">Informacion:</div>
-					<ul class="text-sm space-y-1 text-gray-700">
-						<li>Altura: 1.0 m</li>
-						<li>Peso: 6.9 kg</li>
-						<li>Experiencia base: 64</li>
-						<li>Generación: 1</li>
-					</ul>
-				</div>
-			</div>
-
+		<div>
 			<div class="lg:col-span-2 space-y-6">
 				<div class="flex flex-wrap gap-3">
                     <router-link to="/">
@@ -50,7 +15,7 @@
                         :class="[
                             'border px-4 py-2 rounded-lg text-sm',
                             activeTab === 'estadisticas'
-                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow'
+                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow font-bold'
                             : 'text-gray-700 border-gray-300 hover:bg-gray-100'
                         ]">
                         Estadisticas
@@ -59,7 +24,7 @@
                         :class="[
                             'border px-4 py-2 rounded-lg text-sm',
                             activeTab === 'evoluciones'
-                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow'
+                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow font-bold'
                             : 'text-gray-700 border-gray-300 hover:bg-gray-100'
                         ]"
                         @click="activeTab = 'evoluciones'"
@@ -73,7 +38,7 @@
                         :class="[
                             'border px-4 py-2 rounded-lg text-sm',
                             activeTab === 'habilidades'
-                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow'
+                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow font-bold'
                             : 'text-gray-700 border-gray-300 hover:bg-gray-100'
                         ]"
                     >
@@ -85,7 +50,7 @@
                         :class="[
                             'border px-4 py-2 rounded-lg text-sm',
                             activeTab === 'daños'
-                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow'
+                            ? 'border border-gray-700 px-4 py-2 rounded-lg text-sm text-gray-900 bg-white shadow font-bold'
                             : 'text-gray-700 border-gray-300 hover:bg-gray-100'
                         ]"
                     
@@ -98,30 +63,77 @@
 					<h2 class="text-xl font-bold mb-4">
 						Efectividad
 					</h2>
-					<div class="flex gap-2 mb-6">
-						<button
-							class="border border-gray-300 rounded-full px-4 py-1 text-sm bg-white"
-						>
-							Defensa
-						</button>
-						<button
-							class="border border-gray-800 text-white bg-black rounded-full px-4 py-1 text-sm"
-						>
-							Ataque
-						</button>
-					</div>
-
 					<div class="mt-6 space-y-4">
                         <div v-if="activeTab === 'estadisticas'">
                             <h1 class="flex justify-center text-2xl">Estadisticas en proceso</h1>
                         </div>
                         <div v-if="activeTab === 'evoluciones'">
-                            <h1 class="flex justify-center text-2xl">Evoluciones en proceso</h1>
-                        </div>
-                                <div v-if="activeTab === 'habilidades'">
+                            <div v-if="evolutions.length" class="space-y-6">
+                                <div
+                                v-for="(branch, i) in evolutions"
+                                :key="i"
+                                class="flex items-center gap-4"
+                                >
+                                <div
+                                    v-for="(evo, index) in branch"
+                                    :key="evo.from + '-' + (evo.to ?? 'final')"
+                                    class="flex items-center"
+                                >
+                                    <div class="text-center">
+                                    <img
+                                        :src="`https://img.pokemondb.net/artwork/large/${evo.from}.jpg`"
+                                        :alt="evo.from"
+                                        class="w-24 h-24 object-contain"
+                                    />
+                                    <p class="capitalize mt-1">{{ evo.from }}</p>
+                                    </div>
+                                    <div v-if="evo.to" class="flex flex-col items-center mx-2">
+                                    <span class="text-sm text-gray-500">
+                                        {{
+                                        evo.trigger === 'level-up'
+                                            ? `Nivel ${evo.level ?? '?'}`
+                                            : evo.trigger === 'use-item'
+                                            ? 'Piedra evolutiva'
+                                            : evo.trigger === 'trade'
+                                            ? 'Intercambio'
+                                            : evo.trigger ?? 'Desconocido'
+                                        }}
+                                    </span>
+                                    <span class="text-2xl">→</span>
+                                    </div>
+                                </div>
+                                <div v-if="branch[branch.length - 1].to" class="text-center">
+                                    <img
+                                    :src="`https://img.pokemondb.net/artwork/large/${branch[branch.length - 1].to}.jpg`"
+                                    :alt="branch[branch.length - 1].to"
+                                    class="w-24 h-24 object-contain"
+                                    />
+                                    <p class="capitalize mt-1">
+                                    {{ branch[branch.length - 1].to }}
+                                    </p>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+
+
+
+                        <div v-if="activeTab === 'habilidades'">
                             <h1 class="flex justify-center text-2xl">Habilidades en proceso</h1>
                         </div>
                         <div v-if="activeTab === 'daños'">
+                            <div class="flex gap-2 mb-6">
+                                <button
+                                    class="border border-gray-300 rounded-full px-4 py-1 text-sm bg-white"
+                                >
+                                    Defensa
+                                </button>
+                                <button
+                                    class="border border-gray-800 text-white bg-black rounded-full px-4 py-1 text-sm"
+                                >
+                                    Ataque
+                                </button>
+                            </div>
                             <div v-if="halfDamageTo && halfDamageTo.length">
                                 <div
                                 class="text-sm mb-2 text-gray-600"
@@ -248,82 +260,85 @@
 				</div>
 			</div>
 		</div>
-	</div>
 </template>
 <script setup>
 import { useRoute } from 'vue-router'
-import { onMounted, ref, computed } from 'vue'
-import { TypePokemon } from '../../services/type'
-
-
+import { ref, onMounted } from 'vue'
+import { PokemonType } from '../../services/pokemonType.js'
 
 const route = useRoute()
 const pokemonID = route.params.id
-const noDamageTo = ref([])
-const halfDamageTo = ref([])
-const doubleDamageTo = ref([])
-const noDamageFrom = ref([])
-const halfDamageFrom = ref([])
-const doubleDamageFrom = ref([])
-const types = ref([])
-const pokemonImageUrl = ref('')
+const evolutions = ref([])
 const activeTab = ref()
-
 const typeColors = {
-    normal: '#A8A878',
-    fire: '#F08030',
-    water: '#6890F0',
-    grass: '#78C850',
-    electric: '#F8D030',
-    ice: '#98D8D8',
-    fighting: '#C03028',
-    poison: '#A040A0',
-    ground: '#E0C068',
-    flying: '#A890F0',
-    psychic: '#F85888',
-    bug: '#A8B820',
-    rock: '#B8A038',
-    ghost: '#705898',
-    dragon: '#7038F8',
-    dark: '#705848',
-    steel: '#B8B8D0',
-    fairy: '#F0B6BC'
-};
+  normal: '#A8A878',
+  fire: '#F08030',
+  water: '#6890F0',
+  grass: '#78C850',
+  electric: '#F8D030',
+  ice: '#98D8D8',
+  fighting: '#C03028',
+  poison: '#A040A0',
+  ground: '#E0C068',
+  flying: '#A890F0',
+  psychic: '#F85888',
+  bug: '#A8B820',
+  rock: '#B8A038',
+  ghost: '#705898',
+  dragon: '#7038F8',
+  dark: '#705848',
+  steel: '#B8B8D0',
+  fairy: '#F0B6BC'
+}
+const {
+  noDamageTo,
+  halfDamageTo,
+  doubleDamageTo,
+  noDamageFrom,
+  halfDamageFrom,
+  doubleDamageFrom,
+  loadPokemonType,
+} = PokemonType()
 
-async function loadPokemonType(pokemon) {
-    try {
-        const pokemonData = await TypePokemon(pokemon)
-        const id = pokemonData.id
-        const typeUrls = pokemonData.types.map(t => t.type.url)
-        const typeDataArray = await Promise.all(typeUrls.map(url => fetch(url).then(res => res.json())))
-        const noDamageto = typeDataArray.map(data=> data.damage_relations.no_damage_to)
-        const halfDamageto = typeDataArray.map(data=> data.damage_relations.half_damage_to)
-        const doubleDamageto = typeDataArray.map(data=> data.damage_relations.double_damage_to)
-        const noDamagefrom = typeDataArray.map(data=> data.damage_relations.no_damage_from)
-        const halfDamagefrom = typeDataArray.map(data=> data.damage_relations.half_damage_from)
-        const doubleDamagefrom = typeDataArray.map(data=> data.damage_relations.double_damage_from)
-        const AllnoDamageto = noDamageto.flat().map(data => data.name)
-        const AllhalfDamageto = halfDamageto.flat().map(data => data.name)
-        const AlldoubleDamageto = doubleDamageto.flat().map(data => data.name)
-        const AllnoDamagefrom = noDamagefrom.flat().map(data => data.name)
-        const AllhalfDamagefrom = halfDamagefrom.flat().map(data => data.name)
-        const AlldoubleDamagefrom = doubleDamagefrom.flat().map(data => data.name)
+async function fetchEvolutions(pokemonName) {
+    const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+    const pokemonData = await pokemonRes.json()
 
+    const speciesRes = await fetch(pokemonData.species.url)
+    const speciesData = await speciesRes.json()
 
-        types.value = pokemonData.types.map(t => t.type.name)
-        noDamageTo.value = AllnoDamageto
-        halfDamageTo.value = AllhalfDamageto
-        doubleDamageTo.value = AlldoubleDamageto
-        noDamageFrom.value = AllnoDamagefrom
-        halfDamageFrom.value = AllhalfDamagefrom
-        doubleDamageFrom.value = AlldoubleDamagefrom
-        pokemonImageUrl.value = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
-    } catch (e) {
-        console.error("error al cargar:", e)
+    const evoRes = await fetch(speciesData.evolution_chain.url)
+    const evolutionData = await evoRes.json()
+
+    function getEvolutions(chain, path = [], branches = []) {
+        if (!chain) return branches
+
+        const from = chain.species.name
+
+        if (!chain.evolves_to.length) {
+            branches.push([...path, { from, to: null, level: null, trigger: null }])
+            return branches
+        }
+
+        chain.evolves_to.forEach(evo => {
+            const evoDetails = evo.evolution_details[0]
+            const to = evo.species.name
+            const level = evoDetails?.min_level ?? null
+            const trigger = evoDetails?.trigger?.name ?? null
+
+            const newPath = [...path, { from, to, level, trigger }]
+            getEvolutions(evo, newPath, branches)
+        })
+
+        return branches
     }
+  return getEvolutions(evolutionData.chain)
 }
 
 onMounted(() => {
     loadPokemonType(pokemonID)
+     fetchEvolutions(pokemonID).then(data => {
+    evolutions.value = data
+  })
 })
 </script>
