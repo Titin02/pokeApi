@@ -8,7 +8,7 @@ export function useInfiniteScroll({ fetchMore, loading, endOfList, disabled }) {
         const windowHeight = window.innerHeight
         const documentHeight = document.body.offsetHeight
 
-        if(scrollTop + windowHeight >= documentHeight - 500 && !loading.value && !endOfList.value) {
+        if(scrollTop + windowHeight >= documentHeight - 350 && !loading.value && !endOfList.value) {
             loading.value = true
             fetchMore()
         }
