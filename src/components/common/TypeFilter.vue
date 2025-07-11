@@ -17,7 +17,7 @@
                     :alt="type" 
                     class="w-5 h-5"
                 />
-                <span class="capitalize">
+                <span class="capitalize truncate">
                     {{ type }}
                 </span>
             </button>

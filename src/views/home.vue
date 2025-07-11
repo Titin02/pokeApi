@@ -70,7 +70,7 @@
 					</div>
 				</div>
 			</div>
-			<div v-if="showFilterType" class="bg-white p-4 rounded-xl shadow-md">
+			<div v-if="showFilterType" class="bg-white dark:bg-gray-700 p-4 rounded-xl shadow-md">
 				<TypeFilter 
 					:selectedTypes="selectedTypes" 
 					@update:selectedType="toggleType"
