@@ -60,14 +60,17 @@
 				</div>
 
 				<div class="bg-white rounded-xl shadow p-6">
-					<h2 class="text-xl font-bold mb-4">
-						Efectividad
-					</h2>
 					<div class="mt-6 space-y-4">
                         <div v-if="activeTab === 'estadisticas'">
+                             <h2 class="text-xl font-bold mb-4">
+						        Estadisticas
+					        </h2>
                             <h1 class="flex justify-center text-2xl">Estadisticas en proceso</h1>
                         </div>
                         <div v-if="activeTab === 'evoluciones'">
+                            <h2 class="text-xl font-bold mb-4">
+						        Evoluciones
+					        </h2>
                             <div v-if="evolutions.length" class="space-y-6">
                                 <div
                                 v-for="(branch, i) in evolutions"
@@ -88,17 +91,28 @@
                                     <p class="capitalize mt-1">{{ evo.from }}</p>
                                     </div>
                                     <div v-if="evo.to" class="flex flex-col items-center mx-2">
-                                    <span class="text-sm text-gray-500">
-                                        {{
-                                        evo.trigger === 'level-up'
-                                            ? `Nivel ${evo.level ?? '?'}`
-                                            : evo.trigger === 'use-item'
-                                            ? 'Piedra evolutiva'
-                                            : evo.trigger === 'trade'
-                                            ? 'Intercambio'
-                                            : evo.trigger ?? 'Desconocido'
-                                        }}
+                                        {{ console.log(evo) }}
+                                   <span class="text-sm text-gray-500 leading-tight text-center">
+                                        <div v-if="evo.trigger === 'level-up'">
+                                            Nivel {{ evo.level ?? '?' }}
+                                            <span v-if="evo.min_happiness"> | Felicidad mínima: {{ evo.min_happiness }}</span>
+                                            <span v-if="evo.time_of_day"> | Hora: {{ evo.time_of_day }}</span>
+                                        </div>
+                                        <div v-else-if="evo.trigger === 'use-item'">
+                                            Piedra evolutiva: {{ evo.item ?? '?' }}
+                                        </div>
+                                        <div v-else-if="evo.trigger === 'trade'">
+                                            Intercambio
+                                        </div>
+                                        <div v-else>
+                                            {{ evo.trigger ?? 'Desconocido' }}
+                                        </div>
+                                        <div v-if="evo.location">Ubicación: {{ evo.location }}</div>
+                                        <div v-if="evo.known_move">Movimiento requerido: {{ evo.known_move }}</div>
+                                        <div v-if="evo.known_move_type">Tipo de movimiento: {{ evo.known_move_type }}</div>
+                                        <div v-if="evo.needs_overworld_rain">Requiere lluvia en el mundo</div>
                                     </span>
+
                                     <span class="text-2xl">→</span>
                                     </div>
                                 </div>
@@ -119,9 +133,15 @@
 
 
                         <div v-if="activeTab === 'habilidades'">
+                            <h2 class="text-xl font-bold mb-4">
+						        Habilidades
+					        </h2>
                             <h1 class="flex justify-center text-2xl">Habilidades en proceso</h1>
                         </div>
                         <div v-if="activeTab === 'daños'">
+                            <h2 class="text-xl font-bold mb-4">
+						        Daños
+					        </h2>
                             <div class="flex gap-2 mb-6">
                                 <button
                                     class="border border-gray-300 rounded-full px-4 py-1 text-sm bg-white"
@@ -155,6 +175,7 @@
                                 </div>
                             </div>
                             <div v-if="doubleDamageTo && doubleDamageTo.length">
+                                
                                 <div
                                 class="text-sm mb-2 text-gray-600"
                                 >
@@ -316,7 +337,20 @@ async function fetchEvolutions(pokemonName) {
         const from = chain.species.name
 
         if (!chain.evolves_to.length) {
-            branches.push([...path, { from, to: null, level: null, trigger: null }])
+            branches.push([...path, {
+                from,
+                to: null,
+                trigger: null,
+                level: null,
+                item: null,
+                min_happiness: null,
+                time_of_day: null,
+                gender: null,
+                known_move: null,
+                known_move_type: null,
+                location: null,
+                needs_overworld_rain: null,
+            }])
             return branches
         }
 
@@ -325,8 +359,23 @@ async function fetchEvolutions(pokemonName) {
             const to = evo.species.name
             const level = evoDetails?.min_level ?? null
             const trigger = evoDetails?.trigger?.name ?? null
+            const item = evoDetails?.item?.name ?? null
+            console.log(evoDetails)
 
-            const newPath = [...path, { from, to, level, trigger }]
+            const newPath = [...path, {
+                                from,
+                                to,
+                                trigger,
+                                level,
+                                item: evoDetails?.item?.name ?? null,
+                                min_happiness: evoDetails?.min_happiness ?? null,
+                                time_of_day: evoDetails?.time_of_day ?? null,
+                                gender: evoDetails?.gender ?? null,
+                                known_move: evoDetails?.known_move?.name ?? null,
+                                known_move_type: evoDetails?.known_move_type?.name ?? null,
+                                location: evoDetails?.location?.name ?? null,
+                                needs_overworld_rain: evoDetails?.needs_overworld_rain ?? null,
+                            }]
             getEvolutions(evo, newPath, branches)
         })
 
