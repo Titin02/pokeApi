@@ -64,8 +64,14 @@ import { toRefs, computed, ref } from "vue"
 import spinnerPokeball from '../../assets/spinnerPokeball.png'
 
 const props = defineProps({
-	pokemonData: { type: Object, required: true },
-	generationName: { type: String, default: "" },
+	pokemonData: { 
+		type: Object, 
+		required: true,
+	},
+	generationName: { 
+		type: String, 
+		default: "", 
+	},
 })
 
 const isLoaded = ref(false)
@@ -76,24 +82,24 @@ const {
 } = toRefs(props)
 
 const typeColors = {
-	normal: "#A8A878",
-	fire: "#F08030",
-	water: "#6890F0",
-	grass: "#78C850",
-	electric: "#F8D030",
-	ice: "#98D8D8",
-	fighting: "#C03028",
-	poison: "#A040A0",
-	ground: "#E0C068",
-	flying: "#A890F0",
-	psychic: "#F85888",
-	bug: "#A8B820",
-	rock: "#B8A038",
-	ghost: "#705898",
-	dragon: "#7038F8",
-	dark: "#705848",
-	steel: "#B8B8D0",
-	fairy: "#F0B6BC",
+	normal: 	"#A8A878",
+	fire: 		"#F08030",
+	water: 		"#6890F0",
+	grass: 		"#78C850",
+	electric: 	"#F8D030",
+	ice: 		"#98D8D8",
+	fighting: 	"#C03028",
+	poison: 	"#A040A0",
+	ground: 	"#E0C068",
+	flying: 	"#A890F0",
+	psychic: 	"#F85888",
+	bug: 		"#A8B820",
+	rock: 		"#B8A038",
+	ghost: 		"#705898",
+	dragon: 	"#7038F8",
+	dark: 		"#705848",
+	steel: 		"#B8B8D0",
+	fairy: 		"#F0B6BC",
 }
 
 const pokemonImage = computed(
@@ -103,15 +109,15 @@ const pokemonImage = computed(
 
 const formattedGeneration = computed(() => {
 	const map = {
-		"generation-i": "Generación I",
-		"generation-ii": "Generación II",
-		"generation-iii": "Generación III",
-		"generation-iv": "Generación IV",
-		"generation-v": "Generación V",
-		"generation-vi": "Generación VI",
-		"generation-vii": "Generación VII",
-		"generation-viii": "Generación VIII",
-		"generation-ix": "Generación IX",
+		"generation-i": 	"Generación I",
+		"generation-ii": 	"Generación II",
+		"generation-iii": 	"Generación III",
+		"generation-iv": 	"Generación IV",
+		"generation-v": 	"Generación V",
+		"generation-vi": 	"Generación VI",
+		"generation-vii": 	"Generación VII",
+		"generation-viii": 	"Generación VIII",
+		"generation-ix": 	"Generación IX",
 	}
 	return map[generationName.value] || generationName.value
 })
