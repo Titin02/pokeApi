@@ -6,26 +6,26 @@
 				@input="onInput"
 				@blur="onBlur"
 				placeholder="Buscar Pokémon"
-				class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-0"
+				class="w-full px-4 py-2 border border-gray-300 dark:border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-0 dark:text-gray-100"
 			/>
 			<!-- Sugerencias -->
 			<ul
 				v-if="filteredSuggestions.length && pokemonID"
-				class="absolute bg-white border rounded w-full mt-1 max-h-40 overflow-y-auto shadow z-10"
+				class="absolute bg-white dark:bg-gray-700 border rounded w-full mt-1 max-h-40 overflow-y-auto shadow z-10"
 			>
 				<li
 					v-for="pokemon in filteredSuggestions"
 					:key="pokemon.name"
 					@click="selectSuggestion(pokemon.name)"
-					class="flex items-center justify-between gap-2 p-2 hover:bg-gray-100 cursor-pointer"
+					class="flex items-center justify-between gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-500 cursor-pointer"
 				>
 					<img
 						:src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`"
 						:alt="pokemon.name"
 						class="w-10 h-10"
 					/>
-					<span class="flex-1 capitalize font-mono">{{ pokemon.name }}</span>
-					<span class="text-sm text-gray-500 font-mono">N° {{ pokemon.id }}</span>
+					<span class="flex-1 capitalize font-mono dark:text-gray-100">{{ pokemon.name }}</span>
+					<span class="text-sm text-gray-500 font-mono dark:text-gray-100">N° {{ pokemon.id }}</span>
 				</li>
 			</ul>
 		</div>

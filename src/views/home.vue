@@ -1,22 +1,28 @@
 <template>
-	<div class="bg-[#f9f9f9] min-h-screen px-4 py-6 font-mono">
+	<div class="bg-[#f9f9f9] dark:bg-gray-900 min-h-screen px-4 py-6 font-mono">
 		<div class="flex justify-center items-center mb-2">
 			<img src="../assets/Logo.png" alt="Logo" class="w-16 h-16 object-contain" />
-			<h1 class="text-5xl font-bold tracking-tight">PokeDex</h1>
+			<h1 class="text-5xl font-bold tracking-tight dark:text-gray-100">PokeDex</h1>
+			<button
+				@click="toggleDarkMode"
+				class="ml-4 px-3 py-1 rounded-md border border-gray-400 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+			>
+				{{ darkMode ? '🌞' : '🌙' }}
+			</button>
 		</div>
 		<div class="max-w-6xl mx-auto space-y-6">
 			<!-- Buscar -->
 			<div class="flex justify-center">
-				<div class="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl">
+				<div class="bg-white dark:bg-gray-700 p-4 rounded-2xl shadow-md w-full max-w-2xl">
 					<searchForm @search="searchPokemon" />
 				</div>
 			</div>
 			<!-- Generacion y filtro -->
-			<div class="bg-white p-4 rounded-xl shadow-md">
+			<div class="bg-white dark:bg-gray-700 p-4 rounded-xl shadow-md">
 				<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
 					<!-- Selector Generaciones -->
 					<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
-						<span class="text-sm font-semibold text-gray-600">
+						<span class="text-sm font-semibold text-gray-600 dark:text-gray-100">
 							Generación:
 						</span>
 						<GenerationSelector v-model="selectedGeneration" :generations="generations" />
@@ -37,7 +43,7 @@
 							</button>
 						</div>
 						<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
-							<span class="text-sm font-semibold text-gray-600 sm:mb-0 mb-1 whitespace-nowrap">
+							<span class="text-sm font-semibold text-gray-600 dark:text-gray-100 sm:mb-0 mb-1 whitespace-nowrap">
 								Ordenar por:
 							</span>
 							<div class="flex items-center gap-1">
@@ -118,6 +124,7 @@ import { usePokemonTypeFilter } from "../composable/usePokemonTypeFilter.js"
 import { usePokemonFilterCoordinator } from "../composable/usePokemonFilterCoordinator.js"
 import { usePokemonSearch } from '../composable/usePokemonSearch.js'
 import { useInfiniteScroll } from '../composable/useInfiniteScroll.js'
+import { useDarkMode } from '../composable/useDarkMode.js'
 
 const generations = [
 	{ id: 0, name: "Todas" },
@@ -133,6 +140,11 @@ const generations = [
 ]
 
 const {
+	darkMode,
+	toggleDarkMode,
+} = useDarkMode()
+
+const {
 	selectedGeneration,
 	sortOption,
 	sortedPokemon,
@@ -146,7 +158,10 @@ const {
 	endOfList, 
 	loading,
 	allPokemonList,
-} =	usePokemonLoader(setPokemonList, sortedPokemon)
+} =	usePokemonLoader(
+	setPokemonList, 
+	sortedPokemon,
+)
 
 const { 
 	searchGeneration, 

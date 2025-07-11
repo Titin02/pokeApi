@@ -1,37 +1,39 @@
 <template>
 	<div
-		class="relative group bg-stone-50 border border-stone-200 hover:border-stone-300 hover:shadow-lg rounded-2xl shadow-md cursor-pointer transition-all duration-500 hover:scale-[1.05] w-40 sm:w-48 p-4"
+		class="relative group bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-400 hover:border-gray-300 hover:shadow-lg rounded-2xl shadow-md cursor-pointer transition-transform duration-300 hover:scale-[1.05] w-40 sm:w-48 p-4"
 	>
 		<div
-			class="absolute top-2 left-2 w-7 h-7 rounded-full text-xs flex items-center justify-center bg-stone-100 border border-stone-300 text-stone-600 font-medium"
+			class="absolute top-2 left-2 w-7 h-7 rounded-full text-sm flex items-center justify-center bg-gray-100 dark:bg-gray-500 border border-gray-300 dark:border-gray-400 text-gray-600 dark:text-gray-100 font-medium"
 		>
 			{{ pokemonData.id }}
 		</div>
 
 		<div class="flex justify-center mb-2">
-			<img
-				:src="pokemonImage"
-				alt="Pokemon Image"
-				@load="isLoaded = true"
-				@error="hasError = true"
-				v-show="isLoaded && !hasError"
-				class="w-20 h-20 drop-shadow-sm"
-			/>
-			<img 
-				v-if="!isLoaded"
-				:src="spinnerPokeball" 
-				alt="Cargando..." 
-				class="w-8 h-8 animate-spin" 
-			/>
+			<div class="rounded-full bg-gray-200 dark:bg-gray-500 p-2">
+				<img
+					:src="pokemonImage"
+					alt="Pokemon Image"
+					@load="isLoaded = true"
+					@error="hasError = true"
+					v-show="isLoaded && !hasError"
+					class="w-20 h-20 drop-shadow-sm"
+				/>
+				<img 
+					v-if="!isLoaded"
+					:src="spinnerPokeball" 
+					alt="Cargando..." 
+					class="w-8 h-8 animate-spin" 
+				/>
+			</div>
 		</div>
 
 		<div class="text-center mb-2">
 			<h2
-				class="capitalize font-mono text-stone-700 tracking-wide text-base"
+				class="capitalize font-mono text-gray-700 dark:text-gray-100 tracking-wide text-base"
 			>
 				{{ pokemonData.name.replace("-", " ") }}
 			</h2>
-			<div class="w-10 h-px mx-auto bg-stone-300 mt-1"></div>
+			<div class="w-10 h-px mx-auto bg-gray-300 mt-1"></div>
 		</div>
 
 		<div class="flex justify-center gap-2 mt-1 mb-2">
@@ -52,7 +54,7 @@
 
 		<div
 			v-if="generationName"
-			class="text-center text-[10px] px-2 py-1 rounded-full border bg-stone-100 border-stone-200 text-stone-500 font-light"
+			class="text-center text-[12px] px-2 py-1 rounded-full border bg-gray-100 dark:bg-gray-500 border-gray-200 dark:border-gray-400 text-gray-500 dark:text-gray-100 font-mono"
 		>
 			{{ formattedGeneration }}
 		</div>
