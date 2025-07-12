@@ -77,20 +77,6 @@
 					@clear="handleClearTypes"
 				/>
 			</div>
-			<!-- Card pokemon busqueda -->
-			<div v-if="pokemonSearch" class="bg-white p-6 rounded-xl shadow-md">
-				<div class="flex flex-col items-center space-y-4">
-					<router-link :to="`/detallePokemon/${pokemonData.name}`" class="block">
-						<CardPokemon :pokemonData="pokemonData" />
-					</router-link>
-					<div class="flex flex-wrap gap-4">
-						<button @click="resetSearch"
-							class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm shadow cursor-pointer">
-							Volver
-						</button>
-					</div>
-				</div>
-			</div>
 			<!-- Lista de pokemones -->
 			<div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 				<div 
